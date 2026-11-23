@@ -1032,7 +1032,7 @@
           <span class="mode-badge" id="topSyncBadge">Dez/26–Dez/27</span>
         </div>
         <div class="user-info-pill">
-          <span id="loggedUserDisplay"><strong>Gabriel</strong></span>
+          <span id="loggedUserDisplay"><strong>Gabriel Vieira</strong></span>
           <span id="loggedRolePill" class="role-pill">Proprietário</span>
           <button class="btn-mini" onclick="logoutUser()">Sair</button>
         </div>
@@ -1040,7 +1040,7 @@
 
       <div class="subbar">
         <div class="viewing-banner">
-          <span id="viewingLabel">Meu cronograma: <strong>Gabriel</strong></span>
+          <span id="viewingLabel">Meu cronograma: <strong>Gabriel Vieira</strong></span>
           <button id="backToMineBtn" class="btn-mini hidden" onclick="viewParticipantSchedule(loggedUserId)">Voltar ao meu</button>
         </div>
       </div>
@@ -1169,7 +1169,7 @@
           <div class="section-label" style="margin-bottom:6px;">Regras de Privacidade e Acesso</div>
           <div class="admin-note">
             <strong>1. Senhas Individuais:</strong> Cada integrante entra com o próprio e-mail e senha privada. Nem o proprietário nem outros colegas têm acesso às senhas uns dos outros.<br />
-            <strong>2. Proprietário (Gabriel):</strong> Pode incluir ou remover participantes (até 20 pessoas) e acompanhar todos os cronogramas, mas <strong>não pode</strong> apagar ou editar anotações escritas por outras pessoas.<br />
+            <strong>2. Proprietário (Gabriel Vieira):</strong> Pode incluir ou remover participantes (até 20 pessoas) e acompanhar todos os cronogramas, mas <strong>não pode</strong> apagar ou editar anotações escritas por outras pessoas.<br />
             <strong>3. Colaborador:</strong> Edita e apaga apenas o próprio cronograma e status diário.
           </div>
 
@@ -1275,8 +1275,8 @@
       appId: ""
     };
 
-    const STORAGE_KEY = "crononotas_equipe_2026_2027_v1";
-    const SESSION_KEY = "crononotas_session_uid_v1";
+    const STORAGE_KEY = "crononotas_equipe_2026_2027_v2";
+    const SESSION_KEY = "crononotas_session_uid_v2";
     const OWNER_ID = "u_gabriel";
 
     const ALLOWED_MONTHS = [
@@ -1329,7 +1329,7 @@
     ];
 
     const INITIAL_TEAM = [
-      { id: "u_gabriel", name: "Gabriel", jobRole: "Proprietário / Coordenação", sysRole: "owner", email: "", color: PALETTE[0], active: true },
+      { id: "u_gabriel", name: "Gabriel Vieira", jobRole: "Proprietário / Coordenação", sysRole: "owner", email: "", color: PALETTE[0], active: true },
       { id: "u_aldenan", name: "Aldenan", jobRole: "Agente Social", sysRole: "collab", email: "", color: PALETTE[1], active: true },
       { id: "u_ana", name: "Ana", jobRole: "Auxiliar Enfermagem", sysRole: "collab", email: "", color: PALETTE[2], active: true },
       { id: "u_angel", name: "Angel", jobRole: "Agente de Saúde", sysRole: "collab", email: "", color: PALETTE[3], active: true },
@@ -1370,7 +1370,7 @@
           },
           u_sheila: {
             "2026-12-03": {
-              text: "Atendimento compartilhado no Hospital com @Gabriel e @Talita",
+              text: "Atendimento compartilhado no Hospital com @Gabriel Vieira e @Talita",
               shift: "Manhã",
               status: "confirmado",
               mentions: ["u_gabriel", "u_talita"],
@@ -1382,7 +1382,7 @@
           {
             id: "st_init_1",
             userId: "u_sheila",
-            text: "Hoje: Atendimentos psicológicos e alinhamento com @Gabriel e @Rosimeire.\nSemana: organizar agenda de Dezembro/2026.",
+            text: "Hoje: Atendimentos psicológicos e alinhamento com @Gabriel Vieira e @Rosimeire.\nSemana: organizar agenda de Dezembro/2026.",
             updatedAt: "Hoje, 19:10"
           },
           {
@@ -1486,9 +1486,13 @@
 
     function populateLoginSelect() {
       const sel = document.getElementById("loginMemberSelect");
-      sel.innerHTML = getActiveUsers()
-        .map((u) => `<option value="${u.id}">${u.name} —${u.jobRole}</option>`)
+      const users = getActiveUsers();
+      sel.innerHTML = users
+        .map((u) => `<option value="${u.id}">${u.name} — ${u.jobRole}</option>`)
         .join("");
+      if (users.some((u) => u.id === OWNER_ID)) {
+        sel.value = OWNER_ID;
+      }
       syncLoginEmailFromMember();
 
       const badge = document.getElementById("backendModeBadge");
@@ -1562,183 +1566,4 @@
       viewingUserId = uid;
       localStorage.setItem(SESSION_KEY, uid);
       document.getElementById("loginPasswordInput").value = "";
-      document.getElementById("loginScreen").classList.add("hidden");
-      document.getElementById("appShell").classList.remove("hidden");
-      initAppUI();
-    }
-
-    function logoutUser() {
-      if (useFirebase && fbAuth) fbAuth.signOut();
-      loggedUserId = null;
-      localStorage.removeItem(SESSION_KEY);
-      document.getElementById("appShell").classList.add("hidden");
-      document.getElementById("loginScreen").classList.remove("hidden");
-      populateLoginSelect();
-    }
-
-    function initAppUI() {
-      const monthSel = document.getElementById("monthYearSelect");
-      monthSel.innerHTML = ALLOWED_MONTHS.map((m, idx) => `<option value="${idx}">${m.label}</option>`).join("");
-      monthSel.value = String(monthIndex);
-
-      if (useFirebase && fbDb) {
-        document.getElementById("topSyncBadge").textContent = "Nuvem Ativa";
-        fbDb.collection("crononotas").doc("equipe_principal").onSnapshot((doc) => {
-          if (doc.exists) {
-            const remote = doc.data();
-            if (remote && remote.users) {
-              state = { ...state, ...remote };
-              saveLocalState(state);
-              renderAll();
-            }
-          }
-        });
-      }
-
-      renderAll();
-    }
-
-    function formatDateKey(year, month, day) {
-      return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`; }  function formatDateLabel(dateKey) { if (!dateKey) return "Geral"; const [y, m, d] = dateKey.split("-").map(Number); const dt = new Date(y, m - 1, d); const dias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]; return `${dias[dt.getDay()]}, ${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`; }  function nowTimeLabel() { const dt = new Date(); return `Hoje, ${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`; }  function selectMonthFromDropdown(idxStr) { monthIndex = Number(idxStr); const cur = ALLOWED_MONTHS[monthIndex]; selectedDateKey = formatDateKey(cur.year, cur.month, 1); renderSchedule(); renderDayDrawer(); }  function changeMonth(delta) { const next = monthIndex + delta; if (next < 0 \vert{}\vert{} next >= ALLOWED_MONTHS.length) return; monthIndex = next; document.getElementById("monthYearSelect").value = String(monthIndex); const cur = ALLOWED_MONTHS[monthIndex]; selectedDateKey = formatDateKey(cur.year, cur.month, 1); renderSchedule(); renderDayDrawer(); }  function viewParticipantSchedule(uid) { viewingUserId = uid; renderAll(); }  function toggleCommonFilter() { commonFilterActive = !commonFilterActive; if (commonFilterActive && !selectedCommonUserId) { const other = getActiveUsers().find((u) => u.id !== loggedUserId); selectedCommonUserId = other ? other.id : null; } renderAll(); }  function clearFilters() { commonFilterActive = false; selectedCommonUserId = null; viewingUserId = loggedUserId; document.getElementById("participantSearch").value = ""; document.getElementById("roleFilterSelect").value = "ALL"; renderAll(); }  function isDayInCommon(dateKey, otherId) { const myEntry = (state.schedules[loggedUserId] \vert{}\vert{} {})[dateKey]; const otherEntry = (state.schedules[otherId] \vert{}\vert{} {})[dateKey];  const iMentioned = myEntry && myEntry.status !== "cancelado" && (myEntry.mentions \vert{}\vert{} []).includes(otherId); const theyMentioned = otherEntry && otherEntry.status !== "cancelado" && (otherEntry.mentions \vert{}\vert{} []).includes(loggedUserId); const bothActive = myEntry && myEntry.status !== "cancelado" && (myEntry.text \vert{}\vert{} "").trim() && otherEntry && otherEntry.status !== "cancelado" && (otherEntry.text \vert{}\vert{} "").trim();  return Boolean(iMentioned \vert{}\vert{} theyMentioned \vert{}\vert{} bothActive); }  function getIncomingMentionsForDay(targetUid, dateKey) { const matches = []; getActiveUsers().forEach((u) => { if (u.id === targetUid) return; const entry = (state.schedules[u.id] \vert{}\vert{} {})[dateKey]; if (entry && (entry.mentions \vert{}\vert{} []).includes(targetUid)) { matches.push({ author: u, entry }); } }); return matches; }  function renderTopHeader() { const loggedUser = getUserById(loggedUserId); document.getElementById("loggedUserDisplay").innerHTML = `<strong>${loggedUser.name}</strong>`;
-      const rolePill = document.getElementById("loggedRolePill");
-      if (loggedUser.sysRole === "owner") {
-        rolePill.textContent = "Proprietário";
-        rolePill.className = "role-pill";
-      } else {
-        rolePill.textContent = loggedUser.jobRole || "Colaborador";
-        rolePill.className = "role-pill collab";
-      }
-
-      const viewed = getUserById(viewingUserId);
-      const viewingLabel = document.getElementById("viewingLabel");
-      const backBtn = document.getElementById("backToMineBtn");
-
-      if (viewingUserId === loggedUserId) {
-        viewingLabel.innerHTML = `Meu cronograma: <strong>${viewed.name}</strong> (${viewed.jobRole})`;
-        backBtn.classList.add("hidden");
-      } else {
-        viewingLabel.innerHTML = `Vendo agenda de: <strong>${viewed.name}</strong> (${viewed.jobRole}) — leitura`;
-        backBtn.classList.remove("hidden");
-      }
-    }
-
-    function renderParticipantsBar() {
-      const q = (document.getElementById("participantSearch").value || "").trim().toLowerCase();
-      const roleFilter = document.getElementById("roleFilterSelect").value;
-      document.getElementById("commonToggleBtn").classList.toggle("active", commonFilterActive);
-
-      const list = getActiveUsers().filter((u) => {
-        const matchText = !q || u.name.toLowerCase().includes(q) || (u.jobRole || "").toLowerCase().includes(q);
-        const matchRole = roleFilter === "ALL" || u.jobRole === roleFilter;
-        return matchText && matchRole;
-      });
-
-      document.getElementById("participantsScroll").innerHTML = list
-        .map((u) => {
-          const isView = u.id === viewingUserId;
-          const isCommon = commonFilterActive && u.id === selectedCommonUserId;
-          return `
-            <button class="p-pill ${isView ? "selected-view" : ""} ${isCommon ? "selected-common" : ""}" onclick="handleParticipantClick('${u.id}')">
-              <span class="p-dot" style="background:${u.color}"></span>
-              <span><strong>${u.name}</strong></span>
-              <span class="p-role-tag">${u.jobRole}</span>
-            </button>
-          `;
-        })
-        .join("");
-    }
-
-    function handleParticipantClick(uid) {
-      if (commonFilterActive) {
-        selectedCommonUserId = uid;
-        renderSchedule();
-      } else {
-        viewParticipantSchedule(uid);
-      }
-    }
-
-    function renderSchedule() {
-      const cur = ALLOWED_MONTHS[monthIndex];
-      document.getElementById("monthYearSelect").value = String(monthIndex);
-
-      const firstDay = new Date(cur.year, cur.month, 1);
-      const startDow = firstDay.getDay();
-      const daysInMonth = new Date(cur.year, cur.month + 1, 0).getDate();
-      const prevMonthDays = new Date(cur.year, cur.month, 0).getDate();
-
-      const cells = [];
-      for (let i = startDow - 1; i >= 0; i--) {
-        const d = prevMonthDays - i;
-        const pm = cur.month === 0 ? 11 : cur.month - 1;
-        const py = cur.month === 0 ? cur.year - 1 : cur.year;
-        cells.push({ year: py, month: pm, day: d, inMonth: false });
-      }
-      for (let d = 1; d <= daysInMonth; d++) {
-        cells.push({ year: cur.year, month: cur.month, day: d, inMonth: true });
-      }
-      let nextDay = 1;
-      while (cells.length % 7 !== 0) {
-        const nm = cur.month === 11 ? 0 : cur.month + 1;
-        const ny = cur.month === 11 ? cur.year + 1 : cur.year;
-        cells.push({ year: ny, month: nm, day: nextDay++, inMonth: false });
-      }
-
-      const commonBox = document.getElementById("commonSummaryBox");
-      const commonKeys = new Set();
-      if (commonFilterActive && selectedCommonUserId) {
-        const otherUser = getUserById(selectedCommonUserId);
-        cells.forEach((c) => {
-          if (!c.inMonth) return;
-          const dk = formatDateKey(c.year, c.month, c.day);
-          if (isDayInCommon(dk, selectedCommonUserId)) commonKeys.add(dk);
-        });
-        const sorted = Array.from(commonKeys).sort();
-        commonBox.classList.remove("hidden");
-        commonBox.innerHTML = `
-          <div><strong>Dias em comum com ${otherUser.name} (${otherUser.jobRole})</strong> —${sorted.length} dia(s) neste mês:</div>
-          <div class="common-list">
-            ${
-              sorted.length
-                ? sorted.map((dk) => `<span class="common-tag" onclick="selectDay('${dk}')">${formatDateLabel(dk)}</span>`).join("")
-                : `<span style="color:var(--text-secondary);">Nenhum dia em comum registrado neste mês.</span>`
-            }
-          </div>
-        `;
-      } else {
-        commonBox.classList.add("hidden");
-      }
-
-      const targetSched = state.schedules[viewingUserId] || {};
-      let html = "";
-
-      for (let w = 0; w < cells.length; w += 7) {
-        const weekNum = w / 7 + 1;
-        html += `<div class="week-row"><div class="week-label">Sem ${weekNum}</div>`;
-
-        for (let dIdx = 0; dIdx < 7; dIdx++) {
-          const c = cells[w + dIdx];
-          const dk = formatDateKey(c.year, c.month, c.day);
-          const entry = targetSched[dk];
-          const holiday = HOLIDAYS[dk];
-          const incoming = getIncomingMentionsForDay(viewingUserId, dk);
-          const hasText = entry && entry.text && entry.text.trim().length > 0;
-          const isCommon = commonFilterActive && selectedCommonUserId && c.inMonth && commonKeys.has(dk);
-          const isDimmed = commonFilterActive && selectedCommonUserId && c.inMonth && !isCommon;
-
-          let cls = ["day-square"];
-          if (!c.inMonth) cls.push("other-month");
-          if (dk === selectedDateKey) cls.push("selected-day");
-          if (holiday) cls.push("holiday-day");
-          if (isCommon) cls.push("common-highlight");
-          if (isDimmed) cls.push("dimmed");
-          if (entry && entry.status === "cancelado") cls.push("cancelled-day");
-
-          const mentionChips = (entry && entry.mentions ? entry.mentions : [])
-            .map((uid) => `<span class="mention-chip">@${getUserById(uid).name}</span>`)
-            .join("");
-
-          html += `
-            <div class="${cls.join(" ")}" onclick="selectDay('${dk}')">
-              <div class="day-top">
-                <span class="day-num">${c.day}</span>
-                <div
+      document.getElementById("loginScreen").classList.add("
