@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -52,7 +52,6 @@
       color: inherit;
     }
 
-    /* LOGIN SCREEN */
     .login-screen {
       min-height: 100vh;
       display: flex;
@@ -135,7 +134,6 @@
       border: 1px solid rgba(59, 130, 246, 0.4);
     }
 
-    /* TOP HEADER */
     .topbar {
       position: sticky;
       top: 0;
@@ -227,7 +225,6 @@
       background: rgba(59, 130, 246, 0.28);
     }
 
-    /* MAIN LAYOUT */
     .container {
       max-width: 1280px;
       margin: 0 auto;
@@ -251,7 +248,6 @@
       }
     }
 
-    /* PARTICIPANTS STRIP */
     .participants-section {
       background: var(--bg-surface);
       border: 1px solid var(--border);
@@ -364,7 +360,6 @@
       flex-shrink: 0;
     }
 
-    /* MONTH CONTROLS */
     .month-bar {
       display: flex;
       align-items: center;
@@ -412,13 +407,6 @@
       background: #2563eb;
     }
 
-    .btn-danger {
-      background: var(--danger-soft);
-      border-color: rgba(239, 68, 68, 0.45);
-      color: #fca5a5;
-    }
-
-    /* COMMON SUMMARY */
     .common-summary {
       background: rgba(16, 185, 129, 0.1);
       border: 1px solid rgba(16, 185, 129, 0.4);
@@ -444,7 +432,6 @@
       cursor: pointer;
     }
 
-    /* CALENDAR GRID */
     .grid-wrapper {
       overflow-x: auto;
       background: var(--bg-surface);
@@ -642,7 +629,6 @@
       border: 1px solid rgba(59, 130, 246, 0.35);
     }
 
-    /* RIGHT / BOTTOM DAY ACTIVITIES PANEL (PAINEL DO DIA) */
     .day-drawer-panel {
       background: var(--bg-surface);
       border: 1px solid var(--border-strong);
@@ -719,7 +705,6 @@
       color: #fca5a5;
     }
 
-    /* STATUS FEED */
     .status-composer {
       background: var(--bg-surface);
       border: 1px solid var(--border);
@@ -762,7 +747,6 @@
       flex-wrap: wrap;
     }
 
-    /* ALERTS & CHAT */
     .alert-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
@@ -844,7 +828,6 @@
       outline: none;
     }
 
-    /* TEAM / OWNER */
     .admin-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
@@ -874,7 +857,6 @@
       flex-wrap: wrap;
     }
 
-    /* MODAL */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -1001,7 +983,6 @@
 </head>
 <body>
 
-  <!-- TELA DE ACESSO INDIVIDUAL POR E-MAIL -->
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
       <div class="login-title">
@@ -1043,7 +1024,6 @@
     </div>
   </div>
 
-  <!-- APLICATIVO PRINCIPAL -->
   <div id="appShell" class="hidden">
     <header class="topbar">
       <div class="topbar-row">
@@ -1067,7 +1047,6 @@
     </header>
 
     <main class="container">
-      <!-- ABA 1: CRONOGRAMA + PAINEL DO DIA -->
       <section id="tab-schedule">
         <div class="participants-section">
           <div class="participants-top">
@@ -1104,7 +1083,6 @@
         </div>
 
         <div class="schedule-split">
-          <!-- GRADE HORIZONTAL POR SEMANA -->
           <div class="grid-wrapper">
             <div class="calendar-grid">
               <div class="dow-header">
@@ -1121,7 +1099,6 @@
             </div>
           </div>
 
-          <!-- PAINEL DE ATIVIDADES DO DIA SELECIONADO -->
           <aside class="day-drawer-panel" id="dayDrawerPanel">
             <div class="drawer-header">
               <div>
@@ -1146,7 +1123,6 @@
         </div>
       </section>
 
-      <!-- ABA 2: STATUS DIÁRIO -->
       <section id="tab-status" class="hidden">
         <div class="status-composer">
           <div class="participants-top">
@@ -1168,7 +1144,6 @@
         <div id="statusFeedList"></div>
       </section>
 
-      <!-- ABA 3: ALERTAS & CHAT -->
       <section id="tab-alerts" class="hidden">
         <div class="participants-top" style="margin-bottom:8px;">
           <span class="section-label">Notificações de Marcações e Alterações</span>
@@ -1189,7 +1164,6 @@
         </div>
       </section>
 
-      <!-- ABA 4: EQUIPE & PROPRIETÁRIO -->
       <section id="tab-team" class="hidden">
         <div class="admin-card">
           <div class="section-label" style="margin-bottom:6px;">Regras de Privacidade e Acesso</div>
@@ -1217,7 +1191,6 @@
       </section>
     </main>
 
-    <!-- MODAL DE EDIÇÃO DO DIA -->
     <div id="dayModalBackdrop" class="modal-backdrop" onclick="if(event.target.id==='dayModalBackdrop') closeDayModal()">
       <div class="modal">
         <div class="modal-header">
@@ -1267,7 +1240,6 @@
       </div>
     </div>
 
-    <!-- NAVEGAÇÃO INFERIOR -->
     <nav class="bottom-nav">
       <button class="nav-btn active" id="nav-schedule" onclick="switchTab('schedule')">
         <span>📅</span>
@@ -1289,16 +1261,11 @@
     </nav>
   </div>
 
-  <!-- Firebase SDK (opcional: ativado automaticamente ao preencher FIREBASE_CONFIG abaixo) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <script>
-    // =========================================================================
-    // CONFIGURAÇÃO DO FIREBASE (COLE SUAS CHAVES AQUI PARA SINCRONIZAR NA NUVEM)
-    // Enquanto apiKey estiver vazia, o sistema funciona em modo local no aparelho.
-    // =========================================================================
     const FIREBASE_CONFIG = {
       apiKey: "",
       authDomain: "",
@@ -1312,7 +1279,6 @@
     const SESSION_KEY = "crononotas_session_uid_v1";
     const OWNER_ID = "u_gabriel";
 
-    // Meses permitidos: Dezembro 2026 (2026-11) até Dezembro 2027 (2027-11)
     const ALLOWED_MONTHS = [
       { year: 2026, month: 11, label: "Dezembro 2026" },
       { year: 2027, month: 0, label: "Janeiro 2027" },
@@ -1329,14 +1295,10 @@
       { year: 2027, month: 11, label: "Dezembro 2027" }
     ];
 
-    // Feriados Nacionais, Estaduais (SP), Municipais (Suzano) e Pontos Facultativos (Dez/2026 e 2027)
     const HOLIDAYS = {
-      // Dezembro 2026
       "2026-12-24": { type: "Ponto Facultativo", title: "Véspera de Natal (Ponto Facultativo após 13h/14h)" },
       "2026-12-25": { type: "Feriado Nacional", title: "Natal" },
       "2026-12-31": { type: "Ponto Facultativo", title: "Véspera de Ano-Novo (Ponto Facultativo após 13h/14h)" },
-
-      // 2027
       "2027-01-01": { type: "Feriado Nacional", title: "Confraternização Universal (Ano-Novo)" },
       "2027-01-20": { type: "Feriado Municipal", title: "São Sebastião (Padroeiro — Suzano/SP)" },
       "2027-02-08": { type: "Ponto Facultativo", title: "Carnaval (Segunda-feira — Ponto Facultativo)" },
@@ -1388,7 +1350,6 @@
     function buildInitialState() {
       return {
         users: INITIAL_TEAM,
-        // localAuthHashes[userId] = { email, passHash } (somente no modo teste local)
         localAuth: {},
         schedules: {
           u_gabriel: {
@@ -1471,7 +1432,7 @@
     }
 
     let state = loadLocalState();
-    let monthIndex = 0; // 0 = Dezembro 2026
+    let monthIndex = 0;
     let loggedUserId = null;
     let viewingUserId = null;
     let selectedDateKey = "2026-12-03";
@@ -1526,7 +1487,7 @@
     function populateLoginSelect() {
       const sel = document.getElementById("loginMemberSelect");
       sel.innerHTML = getActiveUsers()
-        .map((u) => `<option value="${u.id}">${u.name} — ${u.jobRole}</option>`)
+        .map((u) => `<option value="${u.id}">${u.name} —${u.jobRole}</option>`)
         .join("");
       syncLoginEmailFromMember();
 
@@ -1638,92 +1599,7 @@
     }
 
     function formatDateKey(year, month, day) {
-      return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    }
-
-    function formatDateLabel(dateKey) {
-      if (!dateKey) return "Geral";
-      const [y, m, d] = dateKey.split("-").map(Number);
-      const dt = new Date(y, m - 1, d);
-      const dias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-      return `${dias[dt.getDay()]}, ${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`;
-    }
-
-    function nowTimeLabel() {
-      const dt = new Date();
-      return `Hoje, ${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`;
-    }
-
-    function selectMonthFromDropdown(idxStr) {
-      monthIndex = Number(idxStr);
-      const cur = ALLOWED_MONTHS[monthIndex];
-      selectedDateKey = formatDateKey(cur.year, cur.month, 1);
-      renderSchedule();
-      renderDayDrawer();
-    }
-
-    function changeMonth(delta) {
-      const next = monthIndex + delta;
-      if (next < 0 || next >= ALLOWED_MONTHS.length) return;
-      monthIndex = next;
-      document.getElementById("monthYearSelect").value = String(monthIndex);
-      const cur = ALLOWED_MONTHS[monthIndex];
-      selectedDateKey = formatDateKey(cur.year, cur.month, 1);
-      renderSchedule();
-      renderDayDrawer();
-    }
-
-    function viewParticipantSchedule(uid) {
-      viewingUserId = uid;
-      renderAll();
-    }
-
-    function toggleCommonFilter() {
-      commonFilterActive = !commonFilterActive;
-      if (commonFilterActive && !selectedCommonUserId) {
-        const other = getActiveUsers().find((u) => u.id !== loggedUserId);
-        selectedCommonUserId = other ? other.id : null;
-      }
-      renderAll();
-    }
-
-    function clearFilters() {
-      commonFilterActive = false;
-      selectedCommonUserId = null;
-      viewingUserId = loggedUserId;
-      document.getElementById("participantSearch").value = "";
-      document.getElementById("roleFilterSelect").value = "ALL";
-      renderAll();
-    }
-
-    function isDayInCommon(dateKey, otherId) {
-      const myEntry = (state.schedules[loggedUserId] || {})[dateKey];
-      const otherEntry = (state.schedules[otherId] || {})[dateKey];
-
-      const iMentioned = myEntry && myEntry.status !== "cancelado" && (myEntry.mentions || []).includes(otherId);
-      const theyMentioned = otherEntry && otherEntry.status !== "cancelado" && (otherEntry.mentions || []).includes(loggedUserId);
-      const bothActive =
-        myEntry && myEntry.status !== "cancelado" && (myEntry.text || "").trim() &&
-        otherEntry && otherEntry.status !== "cancelado" && (otherEntry.text || "").trim();
-
-      return Boolean(iMentioned || theyMentioned || bothActive);
-    }
-
-    function getIncomingMentionsForDay(targetUid, dateKey) {
-      const matches = [];
-      getActiveUsers().forEach((u) => {
-        if (u.id === targetUid) return;
-        const entry = (state.schedules[u.id] || {})[dateKey];
-        if (entry && (entry.mentions || []).includes(targetUid)) {
-          matches.push({ author: u, entry });
-        }
-      });
-      return matches;
-    }
-
-    function renderTopHeader() {
-      const loggedUser = getUserById(loggedUserId);
-      document.getElementById("loggedUserDisplay").innerHTML = `<strong>${loggedUser.name}</strong>`;
+      return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`; }  function formatDateLabel(dateKey) { if (!dateKey) return "Geral"; const [y, m, d] = dateKey.split("-").map(Number); const dt = new Date(y, m - 1, d); const dias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]; return `${dias[dt.getDay()]}, ${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`; }  function nowTimeLabel() { const dt = new Date(); return `Hoje, ${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`; }  function selectMonthFromDropdown(idxStr) { monthIndex = Number(idxStr); const cur = ALLOWED_MONTHS[monthIndex]; selectedDateKey = formatDateKey(cur.year, cur.month, 1); renderSchedule(); renderDayDrawer(); }  function changeMonth(delta) { const next = monthIndex + delta; if (next < 0 \vert{}\vert{} next >= ALLOWED_MONTHS.length) return; monthIndex = next; document.getElementById("monthYearSelect").value = String(monthIndex); const cur = ALLOWED_MONTHS[monthIndex]; selectedDateKey = formatDateKey(cur.year, cur.month, 1); renderSchedule(); renderDayDrawer(); }  function viewParticipantSchedule(uid) { viewingUserId = uid; renderAll(); }  function toggleCommonFilter() { commonFilterActive = !commonFilterActive; if (commonFilterActive && !selectedCommonUserId) { const other = getActiveUsers().find((u) => u.id !== loggedUserId); selectedCommonUserId = other ? other.id : null; } renderAll(); }  function clearFilters() { commonFilterActive = false; selectedCommonUserId = null; viewingUserId = loggedUserId; document.getElementById("participantSearch").value = ""; document.getElementById("roleFilterSelect").value = "ALL"; renderAll(); }  function isDayInCommon(dateKey, otherId) { const myEntry = (state.schedules[loggedUserId] \vert{}\vert{} {})[dateKey]; const otherEntry = (state.schedules[otherId] \vert{}\vert{} {})[dateKey];  const iMentioned = myEntry && myEntry.status !== "cancelado" && (myEntry.mentions \vert{}\vert{} []).includes(otherId); const theyMentioned = otherEntry && otherEntry.status !== "cancelado" && (otherEntry.mentions \vert{}\vert{} []).includes(loggedUserId); const bothActive = myEntry && myEntry.status !== "cancelado" && (myEntry.text \vert{}\vert{} "").trim() && otherEntry && otherEntry.status !== "cancelado" && (otherEntry.text \vert{}\vert{} "").trim();  return Boolean(iMentioned \vert{}\vert{} theyMentioned \vert{}\vert{} bothActive); }  function getIncomingMentionsForDay(targetUid, dateKey) { const matches = []; getActiveUsers().forEach((u) => { if (u.id === targetUid) return; const entry = (state.schedules[u.id] \vert{}\vert{} {})[dateKey]; if (entry && (entry.mentions \vert{}\vert{} []).includes(targetUid)) { matches.push({ author: u, entry }); } }); return matches; }  function renderTopHeader() { const loggedUser = getUserById(loggedUserId); document.getElementById("loggedUserDisplay").innerHTML = `<strong>${loggedUser.name}</strong>`;
       const rolePill = document.getElementById("loggedRolePill");
       if (loggedUser.sysRole === "owner") {
         rolePill.textContent = "Proprietário";
@@ -1819,7 +1695,7 @@
         const sorted = Array.from(commonKeys).sort();
         commonBox.classList.remove("hidden");
         commonBox.innerHTML = `
-          <div><strong>Dias em comum com ${otherUser.name} (${otherUser.jobRole})</strong> — ${sorted.length} dia(s) neste mês:</div>
+          <div><strong>Dias em comum com ${otherUser.name} (${otherUser.jobRole})</strong> —${sorted.length} dia(s) neste mês:</div>
           <div class="common-list">
             ${
               sorted.length
@@ -1865,456 +1741,4 @@
             <div class="${cls.join(" ")}" onclick="selectDay('${dk}')">
               <div class="day-top">
                 <span class="day-num">${c.day}</span>
-                <div class="day-badges">
-                  ${holiday ? `<span class="badge-holiday">${holiday.type === "Ponto Facultativo" ? "Facult." : "Feriado"}</span>` : ""}
-                  ${incoming.length ? `<span class="badge-incoming">+${incoming.length} @</span>` : ""}
-                  ${entry && entry.status === "cancelado" ? `<span class="badge-cancel">Cancelado</span>` : ""}
-                  ${entry && entry.lastEditedAt && entry.status !== "cancelado" ? `<span class="badge-edit">Editado</span>` : ""}
-                </div>
-              </div>
-              ${holiday ? `<div class="holiday-mini-name">${holiday.title}</div>` : ""}
-              <div class="day-note-preview ${hasText ? "" : "empty"}">
-                ${hasText ? escapeHtml(entry.text) : "Sem anotação"}
-              </div>
-              ${mentionChips ? `<div class="day-mentions">${mentionChips}</div>` : ""}
-            </div>
-          `;
-        }
-        html += `</div>`;
-      }
-
-      document.getElementById("weeksContainer").innerHTML = html;
-    }
-
-    function selectDay(dateKey) {
-      selectedDateKey = dateKey;
-      renderSchedule();
-      renderDayDrawer();
-    }
-
-    function renderDayDrawer() {
-      const viewedUser = getUserById(viewingUserId);
-      const isMine = viewingUserId === loggedUserId;
-      const entry = (state.schedules[viewingUserId] || {})[selectedDateKey];
-      const holiday = HOLIDAYS[selectedDateKey];
-      const incoming = getIncomingMentionsForDay(viewingUserId, selectedDateKey);
-
-      document.getElementById("drawerDayTitle").textContent = formatDateLabel(selectedDateKey);
-      document.getElementById("drawerDaySub").textContent = `Agenda de ${viewedUser.name} (${viewedUser.jobRole})`;
-
-      const editBtn = document.getElementById("drawerEditBtn");
-      editBtn.classList.toggle("hidden", !isMine);
-
-      const hBox = document.getElementById("drawerHolidayBox");
-      if (holiday) {
-        hBox.classList.remove("hidden");
-        hBox.innerHTML = `<strong>🟣 ${holiday.type}:</strong> ${holiday.title}`;
-      } else {
-        hBox.classList.add("hidden");
-      }
-
-      const ownerActEl = document.getElementById("drawerOwnerActivity");
-      if (entry && (entry.text || "").trim()) {
-        const stClass =
-          entry.status === "cancelado"
-            ? "st-cancelado"
-            : entry.status === "pendente"
-            ? "st-pendente"
-            : "st-confirmado";
-        const stText =
-          entry.status === "cancelado"
-            ? "Cancelado / Ausência"
-            : entry.status === "pendente"
-            ? "Pendente"
-            : "Confirmado";
-
-        ownerActEl.innerHTML = `
-          <div class="activity-block-head">
-            <span style="color:var(--text-secondary);">🕒 ${entry.shift || "Dia todo"}</span>
-            <span class="status-pill-tag ${stClass}">${stText}</span>
-          </div>
-          <div style="font-size:0.86rem; white-space:pre-line;">${escapeHtml(entry.text)}</div>
-          ${entry.lastEditedAt ? `<div style="font-size:0.7rem; color:var(--text-secondary); margin-top:6px;">Atualizado: ${entry.lastEditedAt}</div>` : ""}
-        `;
-      } else {
-        ownerActEl.innerHTML = `
-          <div style="font-size:0.82rem; color:var(--text-secondary);">
-            Nenhuma atividade registrada neste dia.${isMine ? " Toque em <strong>Editar Dia</strong> para adicionar." : ""}
-          </div>
-        `;
-      }
-
-      const incEl = document.getElementById("drawerIncomingMentions");
-      if (!incoming.length) {
-        incEl.innerHTML = `<div style="font-size:0.79rem; color:var(--text-secondary);">Nenhum colega marcou ${viewedUser.name} nesta data.</div>`;
-      } else {
-        incEl.innerHTML = incoming
-          .map(
-            ({ author, entry: e }) => `
-            <div class="activity-block" style="border-left:3px solid ${author.color};">
-              <div class="activity-block-head">
-                <strong>${author.name} (${author.jobRole})</strong>
-                <span style="font-size:0.7rem; color:var(--text-secondary);">${e.shift || "Dia todo"}</span>
-              </div>
-              <div style="font-size:0.82rem;">${escapeHtml(e.text)}</div>
-            </div>
-          `
-          )
-          .join("");
-      }
-    }
-
-    function openEditModalForSelectedDay() {
-      if (viewingUserId !== loggedUserId) return;
-      const entry = (state.schedules[loggedUserId] || {})[selectedDateKey] || {
-        text: "",
-        shift: "Dia todo",
-        status: "confirmado",
-        mentions: []
-      };
-      const holiday = HOLIDAYS[selectedDateKey];
-
-      document.getElementById("modalDayTitle").textContent = formatDateLabel(selectedDateKey);
-      document.getElementById("modalOwnerInfo").textContent = `Editando meu cronograma (${getUserById(loggedUserId).name})`;
-
-      const hBanner = document.getElementById("modalHolidayBanner");
-      if (holiday) {
-        hBanner.classList.remove("hidden");
-        hBanner.innerHTML = `<strong>🟣 Atenção — ${holiday.type}:</strong> ${holiday.title}`;
-      } else {
-        hBanner.classList.add("hidden");
-      }
-
-      document.getElementById("modalShiftSelect").value = entry.shift || "Dia todo";
-      document.getElementById("modalStatusSelect").value = entry.status || "confirmado";
-      document.getElementById("modalNoteTextarea").value = entry.text || "";
-
-      document.getElementById("modalMentionPicker").innerHTML = getActiveUsers()
-        .filter((u) => u.id !== loggedUserId)
-        .map(
-          (u) => `<button type="button" class="mention-pick-btn" onclick="insertMentionInModal('${u.name}')">@${u.name} <span style="color:var(--text-secondary);">(${u.jobRole})</span></button>`
-        )
-        .join("");
-
-      document.getElementById("dayModalBackdrop").classList.add("open");
-    }
-
-    function insertMentionInModal(name) {
-      const ta = document.getElementById("modalNoteTextarea");
-      const prefix = ta.value && !ta.value.endsWith(" ") && !ta.value.endsWith("\n") ? " " : "";
-      ta.value += `${prefix}@${name} `;
-      ta.focus();
-    }
-
-    async function saveDayModal() {
-      if (viewingUserId !== loggedUserId) return;
-      const text = document.getElementById("modalNoteTextarea").value.trim();
-      const shift = document.getElementById("modalShiftSelect").value;
-      const status = document.getElementById("modalStatusSelect").value;
-
-      const detectedMentions = getActiveUsers()
-        .filter((u) => u.id !== loggedUserId)
-        .filter((u) => new RegExp(`@${escapeRegex(u.name)}\\b`, "i").test(text))
-        .map((u) => u.id);
-
-      if (!state.schedules[loggedUserId]) state.schedules[loggedUserId] = {};
-      const timeLabel = nowTimeLabel();
-
-      state.schedules[loggedUserId][selectedDateKey] = {
-        text,
-        shift,
-        status,
-        mentions: detectedMentions,
-        lastEditedAt: timeLabel
-      };
-
-      const actor = getUserById(loggedUserId);
-      detectedMentions.forEach((targetId) => {
-        state.alerts.unshift({
-          id: "al_" + Date.now() + "_" + targetId,
-          type: status === "cancelado" ? "change" : "mention",
-          targetUserId: targetId,
-          fromUserId: loggedUserId,
-          dateKey: selectedDateKey,
-          message:
-            status === "cancelado"
-              ? `${actor.name} (${actor.jobRole}) marcou CANCELADO em ${formatDateLabel(selectedDateKey)}: "${text}"`
-              : `${actor.name} (${actor.jobRole}) marcou você em ${formatDateLabel(selectedDateKey)} (${shift}): "${text}"`,
-          time: timeLabel,
-          read: false
-        });
-      });
-
-      closeDayModal();
-      renderAll();
-      await persistState();
-    }
-
-    function closeDayModal() {
-      document.getElementById("dayModalBackdrop").classList.remove("open");
-    }
-
-    function openChatForSelectedDay() {
-      activeChatDateKey = selectedDateKey;
-      switchTab("alerts");
-      renderChat();
-    }
-
-    // STATUS DIÁRIO
-    function insertMentionIntoStatus() {
-      const other = getActiveUsers().find((u) => u.id !== loggedUserId);
-      const ta = document.getElementById("statusInput");
-      ta.value += (ta.value && !ta.value.endsWith(" ") ? " " : "") + (other ? `@${other.name} ` : "@Colega ");
-      ta.focus();
-    }
-
-    async function publishDailyStatus() {
-      const ta = document.getElementById("statusInput");
-      const text = ta.value.trim();
-      if (!text) return;
-
-      state.statusPosts = state.statusPosts.filter((p) => p.userId !== loggedUserId);
-      state.statusPosts.unshift({
-        id: "st_" + Date.now(),
-        userId: loggedUserId,
-        text,
-        updatedAt: nowTimeLabel()
-      });
-
-      ta.value = "";
-      renderStatusFeed();
-      await persistState();
-    }
-
-    function renderStatusFeed() {
-      const sel = document.getElementById("statusFilterUser");
-      const cur = sel.value || "ALL";
-      sel.innerHTML =
-        `<option value="ALL">Toda a equipe</option>` +
-        getActiveUsers()
-          .map((u) => `<option value="${u.id}" ${u.id === cur ? "selected" : ""}>${u.name} (${u.jobRole})</option>`)
-          .join("");
-
-      const posts = state.statusPosts.filter((p) => {
-        const u = getUserById(p.userId);
-        if (!u.active) return false;
-        return cur === "ALL" || p.userId === cur;
-      });
-
-      document.getElementById("statusFeedList").innerHTML = posts.length
-        ? posts
-            .map((p, idx) => {
-              const author = getUserById(p.userId);
-              return `
-                <div class="status-feed-card ${idx === 0 ? "top-recent" : ""}">
-                  <div class="status-card-head">
-                    <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap;">
-                      <span class="p-dot" style="background:${author.color}"></span>
-                      <strong>${author.name}</strong>
-                      <span class="p-role-tag">${author.jobRole}</span>
-                      ${idx === 0 ? `<span class="badge-edit" style="background:var(--success-soft); color:#6ee7b7;">Mais recente</span>` : ""}
-                    </div>
-                    <span style="font-size:0.74rem; color:var(--text-secondary);">${p.updatedAt}</span>
-                  </div>
-                  <div style="font-size:0.86rem; white-space:pre-line;">${escapeHtml(p.text)}</div>
-                </div>
-              `;
-            })
-            .join("")
-        : `<div class="status-feed-card" style="color:var(--text-secondary); font-size:0.84rem;">Nenhum status publicado ainda.</div>`;
-    }
-
-    // ALERTAS & CHAT
-    function renderAlertsAndBadge() {
-      const myAlerts = state.alerts.filter((a) => a.targetUserId === loggedUserId);
-      const unread = myAlerts.filter((a) => !a.read).length;
-      const badge = document.getElementById("alertsBadge");
-      badge.textContent = unread;
-      badge.classList.toggle("hidden", unread === 0);
-
-      document.getElementById("alertsList").innerHTML = myAlerts.length
-        ? myAlerts
-            .map(
-              (a) => `
-              <div class="alert-card ${a.type === "mention" ? "mention-alert" : "change-alert"}">
-                <div>
-                  <div style="font-size:0.84rem; font-weight:${a.read ? "500" : "700"};">${escapeHtml(a.message)}</div>
-                  <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:3px;">${a.time}</div>
-                </div>
-                <button class="btn-mini" onclick="activeChatDateKey='${a.dateKey || ""}'; renderChat(); document.getElementById('chatInput').focus();">Conversar</button>
-              </div>
-            `
-            )
-            .join("")
-        : `<div class="alert-card" style="font-size:0.82rem; color:var(--text-secondary);">Nenhuma notificação no momento.</div>`;
-    }
-
-    async function markAllAlertsRead() {
-      state.alerts.forEach((a) => {
-        if (a.targetUserId === loggedUserId) a.read = true;
-      });
-      renderAlertsAndBadge();
-      await persistState();
-    }
-
-    function renderChat() {
-      document.getElementById("chatContextBadge").textContent = activeChatDateKey
-        ? `Assunto: ${formatDateLabel(activeChatDateKey)}`
-        : "Assunto: Geral da Equipe";
-
-      const box = document.getElementById("chatMessages");
-      box.innerHTML = state.chatMessages.length
-        ? state.chatMessages
-            .map((m) => {
-              const s = getUserById(m.fromUserId);
-              return `
-                <div class="msg-item">
-                  <div class="msg-head">
-                    <strong style="color:${s.color}">${s.name} (${s.jobRole})</strong>
-                    <span>${m.contextDateKey ? formatDateLabel(m.contextDateKey) + " • " : ""}${m.time}</span>
-                  </div>
-                  <div>${escapeHtml(m.text)}</div>
-                </div>
-              `;
-            })
-            .join("")
-        : `<div style="font-size:0.8rem; color:var(--text-secondary);">Sem mensagens ainda.</div>`;
-      box.scrollTop = box.scrollHeight;
-    }
-
-    async function sendChatMessage(e) {
-      e.preventDefault();
-      const input = document.getElementById("chatInput");
-      const text = input.value.trim();
-      if (!text) return;
-
-      const dt = new Date();
-      state.chatMessages.push({
-        id: "msg_" + Date.now(),
-        fromUserId: loggedUserId,
-        contextDateKey: activeChatDateKey,
-        text,
-        time: `${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`
-      });
-      input.value = "";
-      renderChat();
-      await persistState();
-    }
-
-    // EQUIPE / PROPRIETÁRIO
-    function renderTeamTab() {
-      const me = getUserById(loggedUserId);
-      document.getElementById("ownerControls").classList.toggle("hidden", me.sysRole !== "owner");
-
-      const active = getActiveUsers();
-      document.getElementById("activeMembersCount").textContent = active.length;
-
-      document.getElementById("membersList").innerHTML = active
-        .map((u) => {
-          const canRemove = me.sysRole === "owner" && u.sysRole !== "owner";
-          return `
-            <div class="member-row">
-              <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap;">
-                <span class="p-dot" style="background:${u.color}"></span>
-                <strong>${u.name}</strong>
-                <span class="p-role-tag">${u.jobRole}</span>
-                ${u.email ? `<span style="font-size:0.72rem; color:var(--text-secondary);">(${u.email})</span>` : `<span style="font-size:0.72rem; color:var(--warning);">(Aguardando 1º acesso)</span>`}
-              </div>
-              <div style="display:flex; gap:6px;">
-                <button class="btn-mini" onclick="switchTab('schedule'); viewParticipantSchedule('${u.id}')">Ver agenda</button>
-                ${canRemove ? `<button class="btn-mini" style="background:var(--danger-soft); color:#fca5a5; border-color:rgba(239,68,68,0.4);" onclick="removeCollaborator('${u.id}')">Remover</button>` : ""}
-              </div>
-            </div>
-          `;
-        })
-        .join("");
-    }
-
-    async function addCollaborator() {
-      const me = getUserById(loggedUserId);
-      if (me.sysRole !== "owner") return;
-
-      const name = document.getElementById("newMemberName").value.trim();
-      const jobRole = document.getElementById("newMemberRole").value.trim() || "Colaborador";
-      const email = document.getElementById("newMemberEmail").value.trim().toLowerCase();
-      if (!name) return;
-
-      if (getActiveUsers().length >= 20) {
-        alert("Limite de 20 participantes ativos atingido.");
-        return;
-      }
-
-      state.users.push({
-        id: "u_" + Date.now(),
-        name,
-        jobRole,
-        sysRole: "collab",
-        email,
-        color: PALETTE[state.users.length % PALETTE.length],
-        active: true
-      });
-
-      document.getElementById("newMemberName").value = "";
-      document.getElementById("newMemberRole").value = "";
-      document.getElementById("newMemberEmail").value = "";
-      renderAll();
-      await persistState();
-    }
-
-    async function removeCollaborator(uid) {
-      const me = getUserById(loggedUserId);
-      if (me.sysRole !== "owner" || uid === OWNER_ID) return;
-      const target = state.users.find((u) => u.id === uid);
-      if (target) {
-        target.active = false;
-        if (viewingUserId === uid) viewingUserId = loggedUserId;
-        if (selectedCommonUserId === uid) selectedCommonUserId = null;
-        renderAll();
-        await persistState();
-      }
-    }
-
-    function switchTab(tab) {
-      ["schedule", "status", "alerts", "team"].forEach((t) => {
-        document.getElementById("tab-" + t).classList.toggle("hidden", t !== tab);
-        document.getElementById("nav-" + t).classList.toggle("active", t === tab);
-      });
-      if (tab === "alerts") renderChat();
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
-
-    function escapeRegex(str) {
-      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    }
-
-    function renderAll() {
-      renderTopHeader();
-      renderParticipantsBar();
-      renderSchedule();
-      renderDayDrawer();
-      renderStatusFeed();
-      renderAlertsAndBadge();
-      renderChat();
-      renderTeamTab();
-    }
-
-    // Boot
-    populateLoginSelect();
-    const savedSessionUid = localStorage.getItem(SESSION_KEY);
-    if (savedSessionUid && getActiveUsers().some((u) => u.id === savedSessionUid)) {
-      loggedUserId = savedSessionUid;
-      viewingUserId = savedSessionUid;
-      document.getElementById("loginScreen").classList.add("hidden");
-      document.getElementById("appShell").classList.remove("hidden");
-      initAppUI();
-    }
-  </script>
-</body>
-</html>
+                <div
