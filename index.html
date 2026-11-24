@@ -21,7 +21,7 @@
     button, input, textarea, select { font-family: inherit; color: inherit; }
     .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; background: radial-gradient(circle at top, #182338 0%, #0e131b 70%); }
     .login-card { width: 100%; max-width: 420px; background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 20px; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45); }
-    .login-title { font-size: 1.25rem; font-weight: 800; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px; }
+    .login-title { font-size: 1.25rem; font-weight: 800; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .login-sub { font-size: 0.83rem; color: var(--text-secondary); margin: 0 0 14px 0; }
     .form-group { margin-bottom: 11px; }
     .form-group label { display: block; font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; }
@@ -29,6 +29,7 @@
     .form-control:focus { border-color: var(--accent); }
     .privacy-box { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-sm); padding: 9px 10px; font-size: 0.77rem; color: #a7f3d0; margin-bottom: 12px; }
     .mode-badge { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; font-weight: 700; background: var(--accent-soft); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
+    .mode-badge.cloud { background: var(--success-soft); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.45); }
     .topbar { position: sticky; top: 0; z-index: 30; background: rgba(14, 19, 27, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 10px 14px; }
     .topbar-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1rem; }
@@ -141,10 +142,10 @@
     <div class="login-card">
       <div class="login-title">
         <span>📅 CronoNotas Equipe</span>
-        <span class="mode-badge" id="backendModeBadge">Pronto p/ GitHub</span>
+        <span class="mode-badge" id="backendModeBadge">Conectando...</span>
       </div>
       <p class="login-sub">
-        Cronograma mensal e semanal (Dez/2026 a Dez/2027) com feriados, pontos facultativos e mural diário.
+        Cronograma mensal e semanal (Dez/2026 a Dez/2027) sincronizado entre celular e computador.
       </p>
 
       <div class="privacy-box">
@@ -173,7 +174,7 @@
       </button>
 
       <p style="font-size:0.74rem; color:var(--text-secondary); margin:10px 0 0 0; text-align:center;">
-        Primeiro acesso? Digite seu e-mail e crie sua senha acima para ativar sua conta individual.
+        Primeiro acesso? Digite seu e-mail e crie sua senha acima para ativar sua conta em todos os aparelhos.
       </p>
     </div>
   </div>
@@ -415,9 +416,28 @@
     </nav>
   </div>
 
+  <!-- Firebase SDK (compatível com página única estática) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
   <script>
-    const STORAGE_KEY = "crononotas_equipe_2026_2027_v3";
-    const SESSION_KEY = "crononotas_session_uid_v3";
+    // =========================================================================
+    // CONFIGURAÇÃO DO PROJETO FIREBASE: cronotas-67c92
+    // =========================================================================
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyCz9Sd_w4Sts6dxFuhho1xxJYplGGsTe84",
+      authDomain: "cronotas-67c92.firebaseapp.com",
+      databaseURL: "https://cronotas-67c92-default-rtdb.firebaseio.com",
+      projectId: "cronotas-67c92",
+      storageBucket: "cronotas-67c92.firebasestorage.app",
+      messagingSenderId: "119856042582",
+      appId: "1:119856042582:web:f9409ee29606a3a36161f7",
+      measurementId: "G-40XL7C66V7"
+    };
+    // =========================================================================
+
+    const STORAGE_KEY = "crononotas_equipe_2026_2027_cloud_v1";
+    const SESSION_KEY = "crononotas_session_uid_cloud_v1";
     const OWNER_ID = "u_gabriel";
 
     const ALLOWED_MONTHS = [
@@ -514,29 +534,28 @@
       };
     }
 
-    function loadLocalState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (parsed && Array.isArray(parsed.users) && parsed.users.length) {
-            return {
-              users: parsed.users,
-              localAuth: parsed.localAuth || {},
-              schedules: parsed.schedules || {},
-              statusPosts: Array.isArray(parsed.statusPosts) ? parsed.statusPosts : [],
-              alerts: Array.isArray(parsed.alerts) ? parsed.alerts : [],
-              chatMessages: Array.isArray(parsed.chatMessages) ? parsed.chatMessages : []
-            };
-          }
-        }
-      } catch (e) {}
-      const init = buildInitialState();
-      saveLocalState(init);
-      return init;
+    function normalizeState(parsed) {
+      return {
+        users: Array.isArray(parsed.users) && parsed.users.length ? parsed.users : INITIAL_TEAM,
+        localAuth: parsed.localAuth || {},
+        schedules: parsed.schedules || {},
+        statusPosts: Array.isArray(parsed.statusPosts) ? parsed.statusPosts : [],
+        alerts: Array.isArray(parsed.alerts) ? parsed.alerts : [],
+        chatMessages: Array.isArray(parsed.chatMessages) ? parsed.chatMessages : []
+      };
     }
 
-    let state = loadLocalState();
+    function loadLocalCache() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return normalizeState(JSON.parse(raw));
+      } catch (e) {}
+      return buildInitialState();
+    }
+
+    let state = loadLocalCache();
+    let dbRef = null;
+    let cloudActive = false;
     let monthIndex = 0;
     let loggedUserId = null;
     let viewingUserId = null;
@@ -545,8 +564,67 @@
     let selectedCommonUserId = null;
     let activeChatDateKey = null;
 
-    function saveLocalState(target = state) {
+    function isFirebaseConfigured() {
+      return Boolean(
+        FIREBASE_CONFIG &&
+        FIREBASE_CONFIG.databaseURL &&
+        FIREBASE_CONFIG.databaseURL.startsWith("https://") &&
+        !FIREBASE_CONFIG.databaseURL.includes("COLE_SUA")
+      );
+    }
+
+    function updateSyncBadges(isCloud) {
+      cloudActive = isCloud;
+      const loginBadge = document.getElementById("backendModeBadge");
+      const topBadge = document.getElementById("topSyncBadge");
+      if (loginBadge) {
+        loginBadge.textContent = isCloud ? "🟢 Nuvem Ativa (Compartilhado)" : "⚠️ Modo Local (Falta chave Firebase)";
+        loginBadge.classList.toggle("cloud", isCloud);
+      }
+      if (topBadge) {
+        topBadge.textContent = isCloud ? "🟢 Nuvem Sincronizada" : "⚠️ Modo Local";
+        topBadge.classList.toggle("cloud", isCloud);
+      }
+    }
+
+    function initCloudSync() {
+      if (!isFirebaseConfigured() || typeof firebase === "undefined") {
+        updateSyncBadges(false);
+        return;
+      }
+      try {
+        if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+        dbRef = firebase.database().ref("crononotas_equipe_v1");
+
+        dbRef.on("value", (snapshot) => {
+          const val = snapshot.val();
+          if (val) {
+            state = normalizeState(val);
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+          } else {
+            dbRef.set(state);
+          }
+          updateSyncBadges(true);
+          if (loggedUserId) {
+            renderAll();
+          } else {
+            populateLoginSelect();
+          }
+        }, (err) => {
+          console.error("Erro Firebase:", err);
+          updateSyncBadges(false);
+        });
+      } catch (e) {
+        console.error("Falha ao iniciar Firebase:", e);
+        updateSyncBadges(false);
+      }
+    }
+
+    function persistState(target = state) {
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(target)); } catch (e) {}
+      if (dbRef) {
+        dbRef.set(target).catch((err) => console.error("Erro ao salvar na nuvem:", err));
+      }
     }
 
     function simpleHash(str) {
@@ -577,6 +655,7 @@
     function populateLoginSelect() {
       const sel = document.getElementById("loginMemberSelect");
       if (!sel) return;
+      const previousVal = sel.value;
       const users = getActiveUsers();
       sel.innerHTML = "";
       users.forEach((u) => {
@@ -585,10 +664,12 @@
         opt.textContent = `${u.name} — ${u.jobRole}`;
         sel.appendChild(opt);
       });
-      if (users.some((u) => u.id === OWNER_ID)) sel.value = OWNER_ID;
+      if (previousVal && users.some((u) => u.id === previousVal)) {
+        sel.value = previousVal;
+      } else if (users.some((u) => u.id === OWNER_ID)) {
+        sel.value = OWNER_ID;
+      }
       syncLoginEmailFromMember();
-      const badge = document.getElementById("backendModeBadge");
-      if (badge) badge.textContent = "Pronto p/ GitHub";
     }
 
     function syncLoginEmailFromMember() {
@@ -635,7 +716,7 @@
         user.email = email;
       }
 
-      saveLocalState();
+      persistState();
       loggedUserId = uid;
       viewingUserId = uid;
       try { localStorage.setItem(SESSION_KEY, uid); } catch (e) {}
@@ -1029,7 +1110,7 @@
       });
 
       closeDayModal();
-      saveLocalState();
+      persistState();
       renderAll();
     }
 
@@ -1057,7 +1138,7 @@
       state.statusPosts = state.statusPosts.filter((p) => p.userId !== loggedUserId);
       state.statusPosts.unshift({ id: "st_" + Date.now(), userId: loggedUserId, text, updatedAt: nowTimeLabel() });
       ta.value = "";
-      saveLocalState();
+      persistState();
       renderStatusFeed();
     }
 
@@ -1123,7 +1204,7 @@
 
     function markAllAlertsRead() {
       state.alerts.forEach((a) => { if (a.targetUserId === loggedUserId) a.read = true; });
-      saveLocalState();
+      persistState();
       renderAlertsAndBadge();
     }
 
@@ -1161,7 +1242,7 @@
         time: `${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`
       });
       input.value = "";
-      saveLocalState();
+      persistState();
       renderChat();
     }
 
@@ -1211,7 +1292,7 @@
       document.getElementById("newMemberName").value = "";
       document.getElementById("newMemberRole").value = "";
       document.getElementById("newMemberEmail").value = "";
-      saveLocalState();
+      persistState();
       renderAll();
     }
 
@@ -1223,7 +1304,7 @@
         target.active = false;
         if (viewingUserId === uid) viewingUserId = loggedUserId;
         if (selectedCommonUserId === uid) selectedCommonUserId = null;
-        saveLocalState();
+        persistState();
         renderAll();
       }
     }
@@ -1291,32 +1372,4 @@
       bind("saveModalBtn", "click", saveDayModal);
       bind("dayModalBackdrop", "click", (e) => { if (e.target && e.target.id === "dayModalBackdrop") closeDayModal(); });
       bind("insertStatusMentionBtn", "click", insertMentionIntoStatus);
-      bind("publishStatusBtn", "click", publishDailyStatus);
-      bind("statusFilterUser", "change", renderStatusFeed);
-      bind("markAlertsReadBtn", "click", markAllAlertsRead);
-      bind("chatForm", "submit", sendChatMessage);
-      bind("addMemberBtn", "click", addCollaborator);
-      document.querySelectorAll(".nav-btn").forEach((btn) => {
-        btn.addEventListener("click", () => switchTab(btn.getAttribute("data-tab")));
-      });
-    }
-
-    onReady(() => {
-      bindEvents();
-      showLoginScreen();
-      try {
-        const savedSessionUid = localStorage.getItem(SESSION_KEY);
-        if (savedSessionUid && getActiveUsers().some((u) => u.id === savedSessionUid)) {
-          loggedUserId = savedSessionUid;
-          viewingUserId = savedSessionUid;
-          document.getElementById("loginScreen").classList.add("hidden");
-          document.getElementById("appShell").classList.remove("hidden");
-          initAppUI();
-        }
-      } catch (e) {
-        showLoginScreen();
-      }
-    });
-  </script>
-</body>
-</html>
+      bind("publishStatusBtn", "click",
