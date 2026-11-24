@@ -72,7 +72,7 @@
     .dow-cell { text-align: center; font-size: 0.74rem; font-weight: 700; color: var(--text-secondary); padding: 4px 2px; }
     .week-row { display: grid; grid-template-columns: 74px repeat(7, 1fr); gap: 5px; margin-bottom: 5px; align-items: stretch; }
     .week-label { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); padding: 5px 4px; text-align: center; }
-    .day-square { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); min-height: 94px; padding: 6px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; gap: 3px; transition: border-color 0.15s; }
+    .day-square { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); min-height: 98px; padding: 6px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; gap: 3px; transition: border-color 0.15s, background-color 0.15s; }
     .day-square:hover { border-color: var(--border-strong); background: var(--bg-card-hover); }
     .day-square.selected-day { border: 2px solid #60a5fa; box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.4); }
     .day-square.other-month { opacity: 0.32; }
@@ -87,6 +87,7 @@
     .badge-edit { background: var(--warning-soft); color: var(--warning); padding: 1px 4px; border-radius: 4px; font-size: 0.62rem; font-weight: 700; }
     .badge-cancel { background: var(--danger-soft); color: #fca5a5; padding: 1px 4px; border-radius: 4px; font-size: 0.62rem; font-weight: 700; }
     .badge-incoming { background: var(--accent-soft); color: #93c5fd; padding: 1px 4px; border-radius: 4px; font-size: 0.62rem; font-weight: 700; }
+    .day-tag-pill { display: inline-block; width: fit-content; max-width: 100%; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.18); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .holiday-mini-name { font-size: 0.66rem; color: #d8b4fe; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .day-note-preview { font-size: 0.73rem; color: var(--text-primary); white-space: pre-line; word-break: break-word; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; flex: 1; }
     .day-note-preview.empty { color: var(--text-muted); font-style: italic; }
@@ -98,7 +99,7 @@
     .drawer-sub { font-size: 0.76rem; color: var(--text-secondary); }
     .holiday-alert-box { background: var(--holiday-soft); border: 1px solid rgba(168, 85, 247, 0.45); border-radius: var(--radius-sm); padding: 8px 10px; margin-bottom: 10px; font-size: 0.8rem; color: #e9d5ff; }
     .activity-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 9px; }
-    .activity-block-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 5px; font-size: 0.78rem; }
+    .activity-block-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 5px; font-size: 0.78rem; flex-wrap: wrap; }
     .status-pill-tag { font-size: 0.68rem; padding: 2px 6px; border-radius: 999px; font-weight: 700; }
     .st-confirmado { background: var(--success-soft); color: #6ee7b7; }
     .st-pendente { background: var(--warning-soft); color: #fcd34d; }
@@ -131,11 +132,17 @@
     .member-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.84rem; flex-wrap: wrap; }
     .modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); z-index: 60; display: none; align-items: center; justify-content: center; padding: 14px; }
     .modal-backdrop.open { display: flex; }
-    .modal { background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); width: 100%; max-width: 500px; max-height: 92vh; overflow-y: auto; padding: 15px; }
+    .modal { background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; padding: 15px; }
     .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .modal textarea { width: 100%; min-height: 95px; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px; font-size: 0.88rem; resize: vertical; outline: none; margin-bottom: 8px; }
-    .mention-picker { display: flex; flex-wrap: wrap; gap: 5px; max-height: 125px; overflow-y: auto; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px; margin-bottom: 10px; }
+    .modal textarea { width: 100%; min-height: 90px; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px; font-size: 0.88rem; resize: vertical; outline: none; margin-bottom: 8px; }
+    .mention-picker { display: flex; flex-wrap: wrap; gap: 5px; max-height: 115px; overflow-y: auto; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px; margin-bottom: 10px; }
     .mention-pick-btn { background: var(--bg-card); border: 1px solid var(--border); border-radius: 999px; padding: 3px 8px; font-size: 0.74rem; cursor: pointer; }
+    .quick-phrases { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+    .quick-phrase-btn { background: var(--bg-card); border: 1px solid var(--border); border-radius: 999px; padding: 3px 9px; font-size: 0.73rem; font-weight: 600; cursor: pointer; }
+    .quick-phrase-btn:hover { border-color: var(--accent); background: var(--bg-card-hover); }
+    .color-swatches { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .swatch-btn { width: 26px; height: 26px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; }
+    .swatch-btn.active { border-color: #fff; transform: scale(1.12); box-shadow: 0 0 0 2px rgba(255,255,255,0.25); }
     .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--bottom-nav-h); background: rgba(14, 19, 27, 0.98); border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(4, 1fr); z-index: 40; }
     .nav-btn { background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 0.7rem; font-weight: 600; color: var(--text-secondary); cursor: pointer; position: relative; }
@@ -393,6 +400,28 @@
           </div>
         </div>
 
+        <label class="section-label" style="display:block; margin-bottom:4px;">Etiqueta ou frase curta do quadrado</label>
+        <div class="quick-phrases" id="quickTagPhrases">
+          <button type="button" class="quick-phrase-btn" data-tag="Reunião" data-color="#eab308">🟡 Reunião</button>
+          <button type="button" class="quick-phrase-btn" data-tag="Agendamento" data-color="#3b82f6">🔵 Agendamento</button>
+          <button type="button" class="quick-phrase-btn" data-tag="Aviso" data-color="#f97316">🟠 Aviso</button>
+          <button type="button" class="quick-phrase-btn" data-tag="Importante" data-color="#ef4444">🔴 Importante</button>
+          <button type="button" class="quick-phrase-btn" data-tag="" data-color="">Limpar cor/frase</button>
+        </div>
+        <input type="text" id="modalTagInput" class="form-control" style="margin-bottom:10px;" maxlength="36" placeholder="Ex.: Reunião, Agendamento, Aviso, Importante..." />
+
+        <label class="section-label" style="display:block; margin-bottom:4px;">Cor do quadrado no calendário</label>
+        <div class="color-swatches" id="modalColorSwatches">
+          <button type="button" class="swatch-btn" data-color="" title="Padrão" style="background:#1d2636; border-color:#425372;"></button>
+          <button type="button" class="swatch-btn" data-color="#eab308" title="Amarelo" style="background:#eab308;"></button>
+          <button type="button" class="swatch-btn" data-color="#3b82f6" title="Azul" style="background:#3b82f6;"></button>
+          <button type="button" class="swatch-btn" data-color="#10b981" title="Verde" style="background:#10b981;"></button>
+          <button type="button" class="swatch-btn" data-color="#f97316" title="Laranja" style="background:#f97316;"></button>
+          <button type="button" class="swatch-btn" data-color="#a855f7" title="Roxo" style="background:#a855f7;"></button>
+          <button type="button" class="swatch-btn" data-color="#ef4444" title="Vermelho" style="background:#ef4444;"></button>
+          <button type="button" class="swatch-btn" data-color="#ec4899" title="Rosa" style="background:#ec4899;"></button>
+        </div>
+
         <label class="section-label" style="display:block; margin-bottom:4px;">Atividades e anotações do dia</label>
         <textarea id="modalNoteTextarea" placeholder="Ex.: Visita ao Hospital 09h + @Sheila + @Talita"></textarea>
 
@@ -527,11 +556,11 @@
         localAuth: {},
         schedules: {
           u_gabriel: {
-            "2026-12-03": { text: "Visita ao Hospital + @Sheila + @Talita", shift: "Manhã", status: "confirmado", mentions: ["u_sheila", "u_talita"], lastEditedAt: "23/11/2026 às 19:00" },
-            "2026-12-10": { text: "Busca ativa e acompanhamento territorial com @Aldenan e @Rosimeire", shift: "Manhã e Tarde", status: "confirmado", mentions: ["u_aldenan", "u_rosimeire"], lastEditedAt: "23/11/2026 às 19:05" }
+            "2026-12-03": { text: "Visita ao Hospital + @Sheila + @Talita", shift: "Manhã", status: "confirmado", tagText: "Agendamento", cardColor: "#3b82f6", mentions: ["u_sheila", "u_talita"], lastEditedAt: "23/11/2026 às 19:00" },
+            "2026-12-10": { text: "Busca ativa e acompanhamento territorial com @Aldenan e @Rosimeire", shift: "Manhã e Tarde", status: "confirmado", tagText: "Reunião", cardColor: "#eab308", mentions: ["u_aldenan", "u_rosimeire"], lastEditedAt: "23/11/2026 às 19:05" }
           },
           u_sheila: {
-            "2026-12-03": { text: "Atendimento compartilhado no Hospital com @Gabriel Vieira e @Talita", shift: "Manhã", status: "confirmado", mentions: ["u_gabriel", "u_talita"], lastEditedAt: "23/11/2026 às 19:10" }
+            "2026-12-03": { text: "Atendimento compartilhado no Hospital com @Gabriel Vieira e @Talita", shift: "Manhã", status: "confirmado", tagText: "Agendamento", cardColor: "#3b82f6", mentions: ["u_gabriel", "u_talita"], lastEditedAt: "23/11/2026 às 19:10" }
           }
         },
         statusPosts: [
@@ -577,6 +606,7 @@
     let selectedCommonUserId = null;
     let activeChatDateKey = null;
     let selectedChatRecipientId = "ALL";
+    let selectedModalColor = "";
     let connectTimeoutId = null;
 
     function isFirebaseConfigured() {
@@ -810,11 +840,21 @@
       return "Confirmado";
     }
 
+    function hexToRgba(hex, alpha) {
+      const clean = (hex || "").replace("#", "");
+      if (clean.length !== 6) return "";
+      const r = parseInt(clean.slice(0, 2), 16);
+      const g = parseInt(clean.slice(2, 4), 16);
+      const b = parseInt(clean.slice(4, 6), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
     function describeScheduleEntry(entry) {
-      if (!entry || !(entry.text || "").trim()) {
-        return "Sem anotação";
-      }
-      return `${formatStatusLabel(entry.status || "confirmado")} • ${entry.shift || "Dia todo"}: ${entry.text.trim()}`;
+      if (!entry) return "Sem anotação";
+      const tagPart = (entry.tagText || "").trim() ? `[${entry.tagText.trim()}] ` : "";
+      const txt = (entry.text || "").trim();
+      if (!txt && !(entry.tagText || "").trim()) return "Sem anotação";
+      return `${tagPart}${formatStatusLabel(entry.status || "confirmado")} • ${entry.shift || "Dia todo"}${txt ? `: ${txt}` : ""}`;
     }
 
     function nowTimeLabel() {
@@ -874,7 +914,7 @@
       const otherEntry = (state.schedules[otherId] || {})[dateKey];
       const iMentioned = myEntry && myEntry.status !== "cancelado" && (myEntry.mentions || []).includes(otherId);
       const theyMentioned = otherEntry && otherEntry.status !== "cancelado" && (otherEntry.mentions || []).includes(loggedUserId);
-      const bothActive = myEntry && myEntry.status !== "cancelado" && (myEntry.text || "").trim() && otherEntry && otherEntry.status !== "cancelado" && (otherEntry.text || "").trim();
+      const bothActive = myEntry && myEntry.status !== "cancelado" && (myEntry.text || myEntry.tagText || "").trim() && otherEntry && otherEntry.status !== "cancelado" && (otherEntry.text || otherEntry.tagText || "").trim();
       return Boolean(iMentioned || theyMentioned || bothActive);
     }
 
@@ -1012,6 +1052,8 @@
           const holiday = HOLIDAYS[dk];
           const incoming = getIncomingMentionsForDay(viewingUserId, dk);
           const hasText = entry && entry.text && entry.text.trim().length > 0;
+          const tagText = entry && entry.tagText ? entry.tagText.trim() : "";
+          const cardColor = entry && entry.cardColor ? entry.cardColor : "";
           const isCommon = commonFilterActive && selectedCommonUserId && c.inMonth && commonKeys.has(dk);
           const isDimmed = commonFilterActive && selectedCommonUserId && c.inMonth && !isCommon;
 
@@ -1023,11 +1065,20 @@
           if (isDimmed) cls.push("dimmed");
           if (entry && entry.status === "cancelado") cls.push("cancelled-day");
 
+          const bgTint = cardColor ? hexToRgba(cardColor, 0.2) : "";
+          const inlineStyle = cardColor
+            ? `background-color:${bgTint}; border-color:${cardColor};`
+            : "";
+
+          const tagBadgeStyle = cardColor
+            ? `background:${hexToRgba(cardColor, 0.34)}; border-color:${cardColor}; color:#fff;`
+            : "";
+
           const mentionChips = (entry && entry.mentions ? entry.mentions : [])
             .map((uid) => `<span class="mention-chip">@${getUserById(uid).name}</span>`).join("");
 
           html += `
-            <div class="${cls.join(" ")}" data-dk="${dk}">
+            <div class="${cls.join(" ")}" style="${inlineStyle}" data-dk="${dk}">
               <div class="day-top">
                 <span class="day-num">${c.day}</span>
                 <div class="day-badges">
@@ -1037,8 +1088,9 @@
                   ${entry && entry.lastEditedAt && entry.status !== "cancelado" ? `<span class="badge-edit">Editado</span>` : ""}
                 </div>
               </div>
+              ${tagText ? `<span class="day-tag-pill" style="${tagBadgeStyle}">${escapeHtml(tagText)}</span>` : ""}
               ${holiday ? `<div class="holiday-mini-name">${holiday.title}</div>` : ""}
-              <div class="day-note-preview ${hasText ? "" : "empty"}">${hasText ? escapeHtml(entry.text) : "Sem anotação"}</div>
+              <div class="day-note-preview ${hasText ? "" : "empty"}">${hasText ? escapeHtml(entry.text) : (tagText ? "" : "Sem anotação")}</div>
               ${mentionChips ? `<div class="day-mentions">${mentionChips}</div>` : ""}
             </div>
           `;
@@ -1079,15 +1131,22 @@
       }
 
       const ownerActEl = document.getElementById("drawerOwnerActivity");
-      if (entry && (entry.text || "").trim()) {
+      const hasAnyContent = entry && ((entry.text || "").trim() || (entry.tagText || "").trim());
+      if (hasAnyContent) {
         const stClass = entry.status === "cancelado" ? "st-cancelado" : entry.status === "pendente" ? "st-pendente" : "st-confirmado";
         const stText = formatStatusLabel(entry.status || "confirmado");
+        const tagHtml = (entry.tagText || "").trim()
+          ? `<span class="day-tag-pill" style="${entry.cardColor ? `background:${hexToRgba(entry.cardColor, 0.34)}; border-color:${entry.cardColor};` : ""}">${escapeHtml(entry.tagText.trim())}</span>`
+          : "";
         ownerActEl.innerHTML = `
           <div class="activity-block-head">
-            <span style="color:var(--text-secondary);">🕒 ${entry.shift || "Dia todo"}</span>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <span style="color:var(--text-secondary);">🕒 ${entry.shift || "Dia todo"}</span>
+              ${tagHtml}
+            </div>
             <span class="status-pill-tag ${stClass}">${stText}</span>
           </div>
-          <div style="font-size:0.86rem; white-space:pre-line;">${escapeHtml(entry.text)}</div>
+          ${(entry.text || "").trim() ? `<div style="font-size:0.86rem; white-space:pre-line;">${escapeHtml(entry.text)}</div>` : ""}
           ${entry.lastEditedAt ? `<div style="font-size:0.7rem; color:var(--text-secondary); margin-top:6px;">Atualizado: ${entry.lastEditedAt}</div>` : ""}
         `;
       } else {
@@ -1110,9 +1169,17 @@
       }
     }
 
+    function setModalColor(colorHex) {
+      selectedModalColor = colorHex || "";
+      document.querySelectorAll("#modalColorSwatches .swatch-btn").forEach((btn) => {
+        const c = btn.getAttribute("data-color") || "";
+        btn.classList.toggle("active", c === selectedModalColor);
+      });
+    }
+
     function openEditModalForSelectedDay() {
       if (viewingUserId !== loggedUserId) return;
-      const entry = (state.schedules[loggedUserId] || {})[selectedDateKey] || { text: "", shift: "Dia todo", status: "confirmado", mentions: [] };
+      const entry = (state.schedules[loggedUserId] || {})[selectedDateKey] || { text: "", shift: "Dia todo", status: "confirmado", tagText: "", cardColor: "", mentions: [] };
       const holiday = HOLIDAYS[selectedDateKey];
 
       document.getElementById("modalDayTitle").textContent = formatDateLabel(selectedDateKey);
@@ -1128,6 +1195,8 @@
 
       document.getElementById("modalShiftSelect").value = entry.shift || "Dia todo";
       document.getElementById("modalStatusSelect").value = entry.status || "confirmado";
+      document.getElementById("modalTagInput").value = entry.tagText || "";
+      setModalColor(entry.cardColor || "");
       document.getElementById("modalNoteTextarea").value = entry.text || "";
 
       const picker = document.getElementById("modalMentionPicker");
@@ -1152,6 +1221,8 @@
       const text = document.getElementById("modalNoteTextarea").value.trim();
       const shift = document.getElementById("modalShiftSelect").value;
       const status = document.getElementById("modalStatusSelect").value;
+      const tagText = document.getElementById("modalTagInput").value.trim();
+      const cardColor = selectedModalColor || "";
 
       const detectedMentions = getActiveUsers().filter((u) => u.id !== loggedUserId)
         .filter((u) => new RegExp(`@${escapeRegex(u.name)}\\b`, "i").test(text)).map((u) => u.id);
@@ -1159,10 +1230,10 @@
       if (!state.schedules[loggedUserId]) state.schedules[loggedUserId] = {};
       const previousEntry = state.schedules[loggedUserId][selectedDateKey]
         ? { ...state.schedules[loggedUserId][selectedDateKey] }
-        : { text: "", shift: "Dia todo", status: "confirmado", mentions: [] };
+        : { text: "", shift: "Dia todo", status: "confirmado", tagText: "", cardColor: "", mentions: [] };
 
       const beforeSummary = describeScheduleEntry(previousEntry);
-      const newEntry = { text, shift, status, mentions: detectedMentions, lastEditedAt: nowTimeLabel() };
+      const newEntry = { text, shift, status, tagText, cardColor, mentions: detectedMentions, lastEditedAt: nowTimeLabel() };
       const afterSummary = describeScheduleEntry(newEntry);
       const timeLabel = newEntry.lastEditedAt;
 
@@ -1171,7 +1242,7 @@
       const actor = getUserById(loggedUserId);
       const dateFormatted = formatDateLabel(selectedDateKey);
 
-      if (beforeSummary !== afterSummary) {
+      if (beforeSummary !== afterSummary || (previousEntry.cardColor || "") !== cardColor) {
         getActiveUsers().forEach((member) => {
           if (member.id === loggedUserId) return;
           state.alerts.unshift({
@@ -1198,7 +1269,7 @@
           fromUserId: loggedUserId,
           ownerUserId: loggedUserId,
           dateKey: selectedDateKey,
-          message: `${actor.name} (${actor.jobRole}) marcou você em ${dateFormatted} (${shift}): "${text || "Sem descrição"}"`,
+          message: `${actor.name} (${actor.jobRole}) marcou você em ${dateFormatted} (${shift}): "${text || tagText || "Sem descrição"}"`,
           beforeText: "",
           afterText: afterSummary,
           time: timeLabel,
@@ -1553,6 +1624,22 @@
       bind("cancelModalBtn", "click", closeDayModal);
       bind("saveModalBtn", "click", saveDayModal);
       bind("dayModalBackdrop", "click", (e) => { if (e.target && e.target.id === "dayModalBackdrop") closeDayModal(); });
+
+      document.querySelectorAll("#quickTagPhrases .quick-phrase-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tag = btn.getAttribute("data-tag") || "";
+          const col = btn.getAttribute("data-color") || "";
+          document.getElementById("modalTagInput").value = tag;
+          setModalColor(col);
+        });
+      });
+
+      document.querySelectorAll("#modalColorSwatches .swatch-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          setModalColor(btn.getAttribute("data-color") || "");
+        });
+      });
+
       bind("insertStatusMentionBtn", "click", insertMentionIntoStatus);
       bind("publishStatusBtn", "click", publishDailyStatus);
       bind("statusFilterUser", "change", renderStatusFeed);
