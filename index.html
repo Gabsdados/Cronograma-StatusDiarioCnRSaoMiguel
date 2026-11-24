@@ -416,7 +416,6 @@
     </nav>
   </div>
 
-  <!-- Firebase SDK (compatível com página única estática) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
@@ -563,6 +562,7 @@
     let commonFilterActive = false;
     let selectedCommonUserId = null;
     let activeChatDateKey = null;
+    let connectTimeoutId = null;
 
     function isFirebaseConfigured() {
       return Boolean(
@@ -573,38 +573,70 @@
       );
     }
 
-    function updateSyncBadges(isCloud) {
-      cloudActive = isCloud;
+    function updateSyncBadges(statusMode) {
+      cloudActive = statusMode === "cloud";
       const loginBadge = document.getElementById("backendModeBadge");
       const topBadge = document.getElementById("topSyncBadge");
-      if (loginBadge) {
-        loginBadge.textContent = isCloud ? "🟢 Nuvem Ativa (Compartilhado)" : "⚠️ Modo Local (Falta chave Firebase)";
-        loginBadge.classList.toggle("cloud", isCloud);
-      }
-      if (topBadge) {
-        topBadge.textContent = isCloud ? "🟢 Nuvem Sincronizada" : "⚠️ Modo Local";
-        topBadge.classList.toggle("cloud", isCloud);
+
+      if (statusMode === "cloud") {
+        if (loginBadge) {
+          loginBadge.textContent = "🟢 Nuvem Ativa (Compartilhado)";
+          loginBadge.classList.add("cloud");
+        }
+        if (topBadge) {
+          topBadge.textContent = "🟢 Nuvem Sincronizada";
+          topBadge.classList.add("cloud");
+        }
+      } else if (statusMode === "connecting") {
+        if (loginBadge) {
+          loginBadge.textContent = "⏳ Conectando à nuvem...";
+          loginBadge.classList.remove("cloud");
+        }
+        if (topBadge) {
+          topBadge.textContent = "⏳ Conectando...";
+          topBadge.classList.remove("cloud");
+        }
+      } else {
+        if (loginBadge) {
+          loginBadge.textContent = "💾 Modo Local (Sem resposta da nuvem)";
+          loginBadge.classList.remove("cloud");
+        }
+        if (topBadge) {
+          topBadge.textContent = "💾 Modo Local";
+          topBadge.classList.remove("cloud");
+        }
       }
     }
 
     function initCloudSync() {
+      updateSyncBadges("connecting");
       if (!isFirebaseConfigured() || typeof firebase === "undefined") {
-        updateSyncBadges(false);
+        updateSyncBadges("local");
         return;
       }
+
+      if (connectTimeoutId) clearTimeout(connectTimeoutId);
+      connectTimeoutId = setTimeout(() => {
+        if (!cloudActive) updateSyncBadges("local");
+      }, 6000);
+
       try {
         if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
         dbRef = firebase.database().ref("crononotas_equipe_v1");
 
         dbRef.on("value", (snapshot) => {
+          if (connectTimeoutId) {
+            clearTimeout(connectTimeoutId);
+            connectTimeoutId = null;
+          }
           const val = snapshot.val();
           if (val) {
             state = normalizeState(val);
             try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
           } else {
-            dbRef.set(state);
+            dbRef.set(state).catch((err) => console.error("Erro ao inicializar nó Firebase:", err));
           }
-          updateSyncBadges(true);
+          updateSyncBadges("cloud");
           if (loggedUserId) {
             renderAll();
           } else {
@@ -612,11 +644,13 @@
           }
         }, (err) => {
           console.error("Erro Firebase:", err);
-          updateSyncBadges(false);
+          if (connectTimeoutId) clearTimeout(connectTimeoutId);
+          updateSyncBadges("local");
         });
       } catch (e) {
         console.error("Falha ao iniciar Firebase:", e);
-        updateSyncBadges(false);
+        if (connectTimeoutId) clearTimeout(connectTimeoutId);
+        updateSyncBadges("local");
       }
     }
 
@@ -1372,4 +1406,34 @@
       bind("saveModalBtn", "click", saveDayModal);
       bind("dayModalBackdrop", "click", (e) => { if (e.target && e.target.id === "dayModalBackdrop") closeDayModal(); });
       bind("insertStatusMentionBtn", "click", insertMentionIntoStatus);
-      bind("publishStatusBtn", "click",
+      bind("publishStatusBtn", "click", publishDailyStatus);
+      bind("statusFilterUser", "change", renderStatusFeed);
+      bind("markAlertsReadBtn", "click", markAllAlertsRead);
+      bind("chatForm", "submit", sendChatMessage);
+      bind("addMemberBtn", "click", addCollaborator);
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.addEventListener("click", () => switchTab(btn.getAttribute("data-tab")));
+      });
+    }
+
+    onReady(() => {
+      bindEvents();
+      showLoginScreen();
+      initCloudSync();
+
+      try {
+        const savedSessionUid = localStorage.getItem(SESSION_KEY);
+        if (savedSessionUid && getActiveUsers().some((u) => u.id === savedSessionUid)) {
+          loggedUserId = savedSessionUid;
+          viewingUserId = savedSessionUid;
+          document.getElementById("loginScreen").classList.add("hidden");
+          document.getElementById("appShell").classList.remove("hidden");
+          initAppUI();
+        }
+      } catch (e) {
+        showLoginScreen();
+      }
+    });
+  </script>
+</body>
+</html>
