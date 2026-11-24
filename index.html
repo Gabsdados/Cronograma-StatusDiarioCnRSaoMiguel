@@ -108,14 +108,22 @@
     .status-feed-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px; }
     .status-feed-card.top-recent { border-left: 4px solid var(--success); }
     .status-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
-    .alert-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; margin-bottom: 8px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .alert-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; margin-bottom: 8px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
     .alert-card.mention-alert { border-left: 4px solid var(--accent); }
     .alert-card.change-alert { border-left: 4px solid var(--warning); }
+    .diff-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 9px; margin-top: 6px; font-size: 0.78rem; }
+    .diff-line { margin: 2px 0; white-space: pre-line; word-break: break-word; }
+    .diff-before { color: #fca5a5; }
+    .diff-after { color: #6ee7b7; }
+    .alert-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
     .chat-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin-top: 12px; }
-    .chat-context-tag { display: inline-block; background: var(--accent-soft); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.35); padding: 3px 8px; border-radius: 6px; font-size: 0.76rem; font-weight: 600; margin-bottom: 8px; }
+    .chat-controls-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .chat-context-tag { display: inline-block; background: var(--accent-soft); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.35); padding: 3px 8px; border-radius: 6px; font-size: 0.76rem; font-weight: 600; }
+    .dm-tag { display: inline-block; background: var(--success-soft); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); padding: 1px 6px; border-radius: 999px; font-size: 0.66rem; font-weight: 700; margin-left: 4px; }
     .chat-messages { max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; padding-right: 4px; }
     .msg-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 0.83rem; }
-    .msg-head { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 3px; }
+    .msg-item.dm-msg { border-left: 3px solid var(--success); }
+    .msg-head { display: flex; justify-content: space-between; gap: 8px; font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 3px; flex-wrap: wrap; }
     .chat-form { display: flex; gap: 6px; }
     .chat-form input { flex: 1; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 0.84rem; outline: none; }
     .admin-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px; }
@@ -205,7 +213,7 @@
       <section id="tab-schedule">
         <div class="participants-section">
           <div class="participants-top">
-            <span class="section-label">Equipe (16/20) — Toque no nome para ver agenda ou filtrar dias em comum</span>
+            <span class="section-label">Equipe — Toque no nome para ver agenda ou filtrar dias em comum</span>
             <div class="filter-controls">
               <input type="text" id="participantSearch" class="search-input" style="width:130px;" placeholder="Nome ou cargo..." />
               <select id="roleFilterSelect" class="search-input" style="width:135px;">
@@ -307,13 +315,19 @@
         <div id="alertsList"></div>
 
         <div class="chat-box">
-          <div class="participants-top">
-            <span class="section-label">Chat da Equipe</span>
-            <span id="chatContextBadge" class="chat-context-tag">Assunto: Geral</span>
+          <div class="chat-controls-row">
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <span class="section-label">Chat</span>
+              <span id="chatContextBadge" class="chat-context-tag">Assunto: Geral</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <label for="chatRecipientSelect" style="font-size:0.74rem; color:var(--text-secondary);">Falar com:</label>
+              <select id="chatRecipientSelect" class="search-input" style="min-width:175px;"></select>
+            </div>
           </div>
           <div id="chatMessages" class="chat-messages"></div>
           <form id="chatForm" class="chat-form">
-            <input type="text" id="chatInput" placeholder="Combine horários, trocas ou ausências..." required />
+            <input type="text" id="chatInput" placeholder="Envie uma mensagem direta ou para a equipe..." required />
             <button type="submit" class="btn btn-primary">Enviar</button>
           </form>
         </div>
@@ -513,22 +527,22 @@
         localAuth: {},
         schedules: {
           u_gabriel: {
-            "2026-12-03": { text: "Visita ao Hospital + @Sheila + @Talita", shift: "Manhã", status: "confirmado", mentions: ["u_sheila", "u_talita"], lastEditedAt: "23/11 19:00" },
-            "2026-12-10": { text: "Busca ativa e acompanhamento territorial com @Aldenan e @Rosimeire", shift: "Manhã e Tarde", status: "confirmado", mentions: ["u_aldenan", "u_rosimeire"], lastEditedAt: "23/11 19:05" }
+            "2026-12-03": { text: "Visita ao Hospital + @Sheila + @Talita", shift: "Manhã", status: "confirmado", mentions: ["u_sheila", "u_talita"], lastEditedAt: "23/11/2026 às 19:00" },
+            "2026-12-10": { text: "Busca ativa e acompanhamento territorial com @Aldenan e @Rosimeire", shift: "Manhã e Tarde", status: "confirmado", mentions: ["u_aldenan", "u_rosimeire"], lastEditedAt: "23/11/2026 às 19:05" }
           },
           u_sheila: {
-            "2026-12-03": { text: "Atendimento compartilhado no Hospital com @Gabriel Vieira e @Talita", shift: "Manhã", status: "confirmado", mentions: ["u_gabriel", "u_talita"], lastEditedAt: "23/11 19:10" }
+            "2026-12-03": { text: "Atendimento compartilhado no Hospital com @Gabriel Vieira e @Talita", shift: "Manhã", status: "confirmado", mentions: ["u_gabriel", "u_talita"], lastEditedAt: "23/11/2026 às 19:10" }
           }
         },
         statusPosts: [
-          { id: "st_init_1", userId: "u_sheila", text: "Hoje: Atendimentos psicológicos e alinhamento com @Gabriel Vieira e @Rosimeire.\nSemana: organizar agenda de Dezembro/2026.", updatedAt: "Hoje, 19:10" },
-          { id: "st_init_2", userId: "u_gabriel", text: "Hoje: Revisão do cronograma de Dezembro/2026 e 2027 com toda a equipe.\nSemana: confirmar visitas externas.", updatedAt: "Hoje, 19:00" }
+          { id: "st_init_1", userId: "u_sheila", text: "Hoje: Atendimentos psicológicos e alinhamento com @Gabriel Vieira e @Rosimeire.\nSemana: organizar agenda de Dezembro/2026.", updatedAt: "23/11/2026 às 19:10" },
+          { id: "st_init_2", userId: "u_gabriel", text: "Hoje: Revisão do cronograma de Dezembro/2026 e 2027 com toda a equipe.\nSemana: confirmar visitas externas.", updatedAt: "23/11/2026 às 19:00" }
         ],
         alerts: [
-          { id: "al_init_1", type: "mention", targetUserId: "u_gabriel", fromUserId: "u_sheila", dateKey: "2026-12-03", message: "Sheila (Psicóloga) marcou você em 03/12/2026: 'Atendimento compartilhado no Hospital'.", time: "Hoje, 19:10", read: false }
+          { id: "al_init_1", type: "mention", targetUserId: "u_gabriel", fromUserId: "u_sheila", ownerUserId: "u_sheila", dateKey: "2026-12-03", message: "Sheila (Psicóloga) marcou você em Qui, 03/12/2026: 'Atendimento compartilhado no Hospital com @Gabriel Vieira e @Talita'.", time: "23/11/2026 às 19:10", read: false }
         ],
         chatMessages: [
-          { id: "msg_init_1", fromUserId: "u_sheila", contextDateKey: "2026-12-03", text: "Pessoal, confirmando nossa saída para o Hospital no dia 03/12 às 08h30.", time: "19:12" }
+          { id: "msg_init_1", fromUserId: "u_sheila", recipientUserId: "ALL", contextDateKey: "2026-12-03", text: "Pessoal, confirmando nossa saída para o Hospital no dia 03/12 às 08h30.", time: "23/11/2026 às 19:12" }
         ]
       };
     }
@@ -562,6 +576,7 @@
     let commonFilterActive = false;
     let selectedCommonUserId = null;
     let activeChatDateKey = null;
+    let selectedChatRecipientId = "ALL";
     let connectTimeoutId = null;
 
     function isFirebaseConfigured() {
@@ -753,6 +768,7 @@
       persistState();
       loggedUserId = uid;
       viewingUserId = uid;
+      selectedChatRecipientId = "ALL";
       try { localStorage.setItem(SESSION_KEY, uid); } catch (e) {}
 
       document.getElementById("loginPasswordInput").value = "";
@@ -788,9 +804,27 @@
       return `${dias[dt.getDay()]}, ${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`;
     }
 
+    function formatStatusLabel(status) {
+      if (status === "cancelado") return "Cancelado / Ausência";
+      if (status === "pendente") return "Pendente / A combinar";
+      return "Confirmado";
+    }
+
+    function describeScheduleEntry(entry) {
+      if (!entry || !(entry.text || "").trim()) {
+        return "Sem anotação";
+      }
+      return `${formatStatusLabel(entry.status || "confirmado")} • ${entry.shift || "Dia todo"}: ${entry.text.trim()}`;
+    }
+
     function nowTimeLabel() {
       const dt = new Date();
-      return `Hoje, ${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`;
+      const dia = String(dt.getDate()).padStart(2, "0");
+      const mes = String(dt.getMonth() + 1).padStart(2, "0");
+      const ano = dt.getFullYear();
+      const hora = String(dt.getHours()).padStart(2, "0");
+      const min = String(dt.getMinutes()).padStart(2, "0");
+      return `${dia}/${mes}/${ano} às ${hora}:${min}`;
     }
 
     function selectMonthFromDropdown(idxStr) {
@@ -1047,7 +1081,7 @@
       const ownerActEl = document.getElementById("drawerOwnerActivity");
       if (entry && (entry.text || "").trim()) {
         const stClass = entry.status === "cancelado" ? "st-cancelado" : entry.status === "pendente" ? "st-pendente" : "st-confirmado";
-        const stText = entry.status === "cancelado" ? "Cancelado / Ausência" : entry.status === "pendente" ? "Pendente" : "Confirmado";
+        const stText = formatStatusLabel(entry.status || "confirmado");
         ownerActEl.innerHTML = `
           <div class="activity-block-head">
             <span style="color:var(--text-secondary);">🕒 ${entry.shift || "Dia todo"}</span>
@@ -1123,21 +1157,50 @@
         .filter((u) => new RegExp(`@${escapeRegex(u.name)}\\b`, "i").test(text)).map((u) => u.id);
 
       if (!state.schedules[loggedUserId]) state.schedules[loggedUserId] = {};
-      const timeLabel = nowTimeLabel();
+      const previousEntry = state.schedules[loggedUserId][selectedDateKey]
+        ? { ...state.schedules[loggedUserId][selectedDateKey] }
+        : { text: "", shift: "Dia todo", status: "confirmado", mentions: [] };
 
-      state.schedules[loggedUserId][selectedDateKey] = { text, shift, status, mentions: detectedMentions, lastEditedAt: timeLabel };
+      const beforeSummary = describeScheduleEntry(previousEntry);
+      const newEntry = { text, shift, status, mentions: detectedMentions, lastEditedAt: nowTimeLabel() };
+      const afterSummary = describeScheduleEntry(newEntry);
+      const timeLabel = newEntry.lastEditedAt;
+
+      state.schedules[loggedUserId][selectedDateKey] = newEntry;
 
       const actor = getUserById(loggedUserId);
+      const dateFormatted = formatDateLabel(selectedDateKey);
+
+      if (beforeSummary !== afterSummary) {
+        getActiveUsers().forEach((member) => {
+          if (member.id === loggedUserId) return;
+          state.alerts.unshift({
+            id: "al_chg_" + Date.now() + "_" + member.id + "_" + Math.random().toString(36).slice(2, 6),
+            type: "change",
+            targetUserId: member.id,
+            fromUserId: loggedUserId,
+            ownerUserId: loggedUserId,
+            dateKey: selectedDateKey,
+            message: `${actor.name} (${actor.jobRole}) alterou o cronograma em ${dateFormatted}.`,
+            beforeText: beforeSummary,
+            afterText: afterSummary,
+            time: timeLabel,
+            read: false
+          });
+        });
+      }
+
       detectedMentions.forEach((targetId) => {
         state.alerts.unshift({
-          id: "al_" + Date.now() + "_" + targetId,
-          type: status === "cancelado" ? "change" : "mention",
+          id: "al_mnt_" + Date.now() + "_" + targetId + "_" + Math.random().toString(36).slice(2, 6),
+          type: "mention",
           targetUserId: targetId,
           fromUserId: loggedUserId,
+          ownerUserId: loggedUserId,
           dateKey: selectedDateKey,
-          message: status === "cancelado"
-            ? `${actor.name} (${actor.jobRole}) marcou CANCELADO em ${formatDateLabel(selectedDateKey)}: "${text}"`
-            : `${actor.name} (${actor.jobRole}) marcou você em ${formatDateLabel(selectedDateKey)} (${shift}): "${text}"`,
+          message: `${actor.name} (${actor.jobRole}) marcou você em ${dateFormatted} (${shift}): "${text || "Sem descrição"}"`,
+          beforeText: "",
+          afterText: afterSummary,
           time: timeLabel,
           read: false
         });
@@ -1156,6 +1219,29 @@
       activeChatDateKey = selectedDateKey;
       switchTab("alerts");
       renderChat();
+    }
+
+    function openScheduleFromAlert(ownerId, dateKey) {
+      if (!ownerId) return;
+      viewingUserId = ownerId;
+      if (dateKey) {
+        selectedDateKey = dateKey;
+        const [y, m] = dateKey.split("-").map(Number);
+        const foundIdx = ALLOWED_MONTHS.findIndex((item) => item.year === y && item.month === (m - 1));
+        if (foundIdx !== -1) {
+          monthIndex = foundIdx;
+        }
+      }
+      switchTab("schedule");
+      renderAll();
+    }
+
+    function startPrivateChatWithUser(targetUid) {
+      if (!targetUid || targetUid === loggedUserId) return;
+      selectedChatRecipientId = targetUid;
+      switchTab("alerts");
+      renderChat();
+      document.getElementById("chatInput").focus();
     }
 
     function insertMentionIntoStatus() {
@@ -1198,7 +1284,7 @@
                     <span class="p-role-tag">${author.jobRole}</span>
                     ${idx === 0 ? `<span class="badge-edit" style="background:var(--success-soft); color:#6ee7b7;">Mais recente</span>` : ""}
                   </div>
-                  <span style="font-size:0.74rem; color:var(--text-secondary);">${p.updatedAt}</span>
+                  <span style="font-size:0.74rem; color:var(--text-secondary);">Publicado em ${p.updatedAt}</span>
                 </div>
                 <div style="font-size:0.86rem; white-space:pre-line;">${escapeHtml(p.text)}</div>
               </div>
@@ -1216,22 +1302,40 @@
 
       const listEl = document.getElementById("alertsList");
       listEl.innerHTML = myAlerts.length
-        ? myAlerts.map((a) => `
-            <div class="alert-card ${a.type === "mention" ? "mention-alert" : "change-alert"}">
-              <div>
-                <div style="font-size:0.84rem; font-weight:${a.read ? "500" : "700"};">${escapeHtml(a.message)}</div>
-                <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:3px;">${a.time}</div>
+        ? myAlerts.map((a) => {
+            const ownerTarget = a.ownerUserId || a.fromUserId || loggedUserId;
+            const hasDiff = Boolean(a.beforeText || a.afterText);
+            return `
+              <div class="alert-card ${a.type === "mention" ? "mention-alert" : "change-alert"}">
+                <div style="flex:1; min-width:220px;">
+                  <div style="font-size:0.84rem; font-weight:${a.read ? "500" : "700"};">${escapeHtml(a.message)}</div>
+                  ${hasDiff ? `
+                    <div class="diff-box">
+                      ${a.beforeText ? `<div class="diff-line diff-before"><strong>Antes:</strong> ${escapeHtml(a.beforeText)}</div>` : ""}
+                      ${a.afterText ? `<div class="diff-line diff-after"><strong>Depois:</strong> ${escapeHtml(a.afterText)}</div>` : ""}
+                    </div>
+                  ` : ""}
+                  <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:4px;">${a.time}</div>
+                </div>
+                <div class="alert-actions">
+                  ${a.dateKey ? `<button type="button" class="btn-mini alert-view-sched-btn" data-owner="${ownerTarget}" data-dk="${a.dateKey}">Ver cronograma</button>` : ""}
+                  ${a.fromUserId && a.fromUserId !== loggedUserId ? `<button type="button" class="btn-mini alert-dm-btn" data-uid="${a.fromUserId}" data-dk="${a.dateKey || ""}">Falar no privado</button>` : ""}
+                </div>
               </div>
-              <button type="button" class="btn-mini alert-chat-btn" data-dk="${a.dateKey || ""}">Conversar</button>
-            </div>
-          `).join("")
+            `;
+          }).join("")
         : `<div class="alert-card" style="font-size:0.82rem; color:var(--text-secondary);">Nenhuma notificação no momento.</div>`;
 
-      listEl.querySelectorAll(".alert-chat-btn").forEach((btn) => {
+      listEl.querySelectorAll(".alert-view-sched-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          openScheduleFromAlert(btn.getAttribute("data-owner"), btn.getAttribute("data-dk"));
+        });
+      });
+
+      listEl.querySelectorAll(".alert-dm-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           activeChatDateKey = btn.getAttribute("data-dk") || null;
-          renderChat();
-          document.getElementById("chatInput").focus();
+          startPrivateChatWithUser(btn.getAttribute("data-uid"));
         });
       });
     }
@@ -1243,22 +1347,60 @@
     }
 
     function renderChat() {
-      document.getElementById("chatContextBadge").textContent = activeChatDateKey ? `Assunto: ${formatDateLabel(activeChatDateKey)}` : "Assunto: Geral da Equipe";
+      const recSelect = document.getElementById("chatRecipientSelect");
+      const others = getActiveUsers().filter((u) => u.id !== loggedUserId);
+
+      if (selectedChatRecipientId !== "ALL" && !others.some((u) => u.id === selectedChatRecipientId)) {
+        selectedChatRecipientId = "ALL";
+      }
+
+      recSelect.innerHTML =
+        `<option value="ALL">👥 Chat Geral da Equipe</option>` +
+        others.map((u) => `<option value="${u.id}">🔒 Privado com ${u.name} (${u.jobRole})</option>`).join("");
+      recSelect.value = selectedChatRecipientId;
+
+      const ctxBadge = document.getElementById("chatContextBadge");
+      const datePart = activeChatDateKey ? `Assunto: ${formatDateLabel(activeChatDateKey)}` : "Assunto: Geral";
+      const targetPart = selectedChatRecipientId === "ALL"
+        ? " • Visível para a equipe"
+        : ` • Conversa privada com ${getUserById(selectedChatRecipientId).name}`;
+      ctxBadge.textContent = datePart + targetPart;
+
+      const visibleMessages = state.chatMessages.filter((m) => {
+        const msgRecipient = m.recipientUserId || "ALL";
+        if (msgRecipient === "ALL") {
+          return selectedChatRecipientId === "ALL";
+        }
+        const isParticipant = m.fromUserId === loggedUserId || msgRecipient === loggedUserId;
+        if (!isParticipant) return false;
+        if (selectedChatRecipientId === "ALL") return false;
+        const otherInMsg = m.fromUserId === loggedUserId ? msgRecipient : m.fromUserId;
+        return otherInMsg === selectedChatRecipientId;
+      });
+
       const box = document.getElementById("chatMessages");
-      box.innerHTML = state.chatMessages.length
-        ? state.chatMessages.map((m) => {
+      box.innerHTML = visibleMessages.length
+        ? visibleMessages.map((m) => {
             const s = getUserById(m.fromUserId);
+            const isDm = (m.recipientUserId || "ALL") !== "ALL";
             return `
-              <div class="msg-item">
+              <div class="msg-item ${isDm ? "dm-msg" : ""}">
                 <div class="msg-head">
-                  <strong style="color:${s.color}">${s.name} (${s.jobRole})</strong>
+                  <div>
+                    <strong style="color:${s.color}">${s.name} (${s.jobRole})</strong>
+                    ${isDm ? `<span class="dm-tag">Privado</span>` : ""}
+                  </div>
                   <span>${m.contextDateKey ? formatDateLabel(m.contextDateKey) + " • " : ""}${m.time}</span>
                 </div>
                 <div>${escapeHtml(m.text)}</div>
               </div>
             `;
           }).join("")
-        : `<div style="font-size:0.8rem; color:var(--text-secondary);">Sem mensagens ainda.</div>`;
+        : `<div style="font-size:0.8rem; color:var(--text-secondary);">${
+            selectedChatRecipientId === "ALL"
+              ? "Nenhuma mensagem no chat geral ainda."
+              : `Nenhuma mensagem privada com ${getUserById(selectedChatRecipientId).name} ainda.`
+          }</div>`;
       box.scrollTop = box.scrollHeight;
     }
 
@@ -1267,13 +1409,13 @@
       const input = document.getElementById("chatInput");
       const text = input.value.trim();
       if (!text) return;
-      const dt = new Date();
       state.chatMessages.push({
-        id: "msg_" + Date.now(),
+        id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
         fromUserId: loggedUserId,
+        recipientUserId: selectedChatRecipientId || "ALL",
         contextDateKey: activeChatDateKey,
         text,
-        time: `${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`
+        time: nowTimeLabel()
       });
       input.value = "";
       persistState();
@@ -1289,6 +1431,7 @@
       const listEl = document.getElementById("membersList");
       listEl.innerHTML = active.map((u) => {
         const canRemove = me.sysRole === "owner" && u.sysRole !== "owner";
+        const canPrivateChat = u.id !== loggedUserId;
         return `
           <div class="member-row">
             <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap;">
@@ -1297,8 +1440,9 @@
               <span class="p-role-tag">${u.jobRole}</span>
               ${u.email ? `<span style="font-size:0.72rem; color:var(--text-secondary);">(${u.email})</span>` : `<span style="font-size:0.72rem; color:var(--warning);">(Aguardando 1º acesso)</span>`}
             </div>
-            <div style="display:flex; gap:6px;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <button type="button" class="btn-mini view-member-btn" data-uid="${u.id}">Ver agenda</button>
+              ${canPrivateChat ? `<button type="button" class="btn-mini dm-member-btn" data-uid="${u.id}">Chat privado</button>` : ""}
               ${canRemove ? `<button type="button" class="btn-mini remove-member-btn" data-uid="${u.id}" style="background:var(--danger-soft); color:#fca5a5; border-color:rgba(239,68,68,0.4);">Remover</button>` : ""}
             </div>
           </div>
@@ -1307,6 +1451,9 @@
 
       listEl.querySelectorAll(".view-member-btn").forEach((btn) => {
         btn.addEventListener("click", () => { switchTab("schedule"); viewParticipantSchedule(btn.getAttribute("data-uid")); });
+      });
+      listEl.querySelectorAll(".dm-member-btn").forEach((btn) => {
+        btn.addEventListener("click", () => startPrivateChatWithUser(btn.getAttribute("data-uid")));
       });
       listEl.querySelectorAll(".remove-member-btn").forEach((btn) => {
         btn.addEventListener("click", () => removeCollaborator(btn.getAttribute("data-uid")));
@@ -1338,6 +1485,7 @@
         target.active = false;
         if (viewingUserId === uid) viewingUserId = loggedUserId;
         if (selectedCommonUserId === uid) selectedCommonUserId = null;
+        if (selectedChatRecipientId === uid) selectedChatRecipientId = "ALL";
         persistState();
         renderAll();
       }
@@ -1409,6 +1557,10 @@
       bind("publishStatusBtn", "click", publishDailyStatus);
       bind("statusFilterUser", "change", renderStatusFeed);
       bind("markAlertsReadBtn", "click", markAllAlertsRead);
+      bind("chatRecipientSelect", "change", (e) => {
+        selectedChatRecipientId = e.target.value;
+        renderChat();
+      });
       bind("chatForm", "submit", sendChatMessage);
       bind("addMemberBtn", "click", addCollaborator);
       document.querySelectorAll(".nav-btn").forEach((btn) => {
